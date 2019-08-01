@@ -11,19 +11,29 @@ namespace Microsoft.Extensions.Configuration
 {
     public static class ApolloConfigurationExtensions
     {
-        public static IApolloConfigurationBuilder AddApollo(this IConfigurationBuilder builder, IConfiguration apolloConfiguration) =>
-            builder.AddApollo(apolloConfiguration.Get<ApolloOptions>());
+        public static IApolloConfigurationBuilder AddApollo(this IConfigurationBuilder builder, IConfiguration apolloConfiguration)
+        {
+            return builder.AddApollo(apolloConfiguration.Get<ApolloOptions>());
+        }
 
-        public static IApolloConfigurationBuilder AddApollo(this IConfigurationBuilder builder, string appId, string metaServer) =>
-            builder.AddApollo(new ApolloOptions { AppId = appId, MetaServer = metaServer });
+        public static IApolloConfigurationBuilder AddApollo(this IConfigurationBuilder builder, string appId, string metaServer)
+        {
+            return builder.AddApollo(new ApolloOptions { AppId = appId, MetaServer = metaServer });
+        }
 
         public static IApolloConfigurationBuilder AddApollo(this IConfigurationBuilder builder, IApolloOptions options)
         {
+            if (builder.Properties[typeof(ApolloConfigurationExtensions).FullName] is ApolloConfigurationBuilder b)
+            {
+                return b;
+            }
             var repositoryFactory = new ConfigRepositoryFactory(options ?? throw new ArgumentNullException(nameof(options)));
 #pragma warning disable 618
             ApolloConfigurationManager.SetApolloOptions(repositoryFactory);
 #pragma warning restore 618
-            return new ApolloConfigurationBuilder(builder, repositoryFactory);
+            var apolloBuilder = new ApolloConfigurationBuilder(builder, repositoryFactory);
+            builder.Properties[typeof(ApolloConfigurationExtensions).FullName] = apolloBuilder;
+            return apolloBuilder;
         }
     }
 }
@@ -33,21 +43,34 @@ namespace Com.Ctrip.Framework.Apollo
     public static class ApolloConfigurationBuilderExtensions
     {
         /// <summary>添加默认namespace: application，等价于AddNamespace(ConfigConsts.NamespaceApplication)</summary>
-        public static IApolloConfigurationBuilder AddDefault(this IApolloConfigurationBuilder builder, ConfigFileFormat format = ConfigFileFormat.Properties) =>
-            builder.AddNamespace(ConfigConsts.NamespaceApplication, null, format);
+        public static IApolloConfigurationBuilder AddDefault(this IApolloConfigurationBuilder builder, ConfigFileFormat format = ConfigFileFormat.Properties)
+        {
+            return builder.AddNamespace(ConfigConsts.NamespaceApplication, null, format);
+        }
 
         /// <summary>添加其他namespace</summary>
-        public static IApolloConfigurationBuilder AddNamespace(this IApolloConfigurationBuilder builder, string @namespace, ConfigFileFormat format = ConfigFileFormat.Properties) =>
-            builder.AddNamespace(@namespace, null, format);
+        public static IApolloConfigurationBuilder AddNamespace(this IApolloConfigurationBuilder builder, string @namespace, ConfigFileFormat format = ConfigFileFormat.Properties)
+        {
+            return builder.AddNamespace(@namespace, null, format);
+        }
 
         /// <summary>添加其他namespace。如果sectionKey为null则添加到root中，可以直接读取，否则使用Configuration.GetSection(sectionKey)读取</summary>
         public static IApolloConfigurationBuilder AddNamespace(this IApolloConfigurationBuilder builder, string @namespace, string sectionKey, ConfigFileFormat format = ConfigFileFormat.Properties)
         {
-            if (string.IsNullOrWhiteSpace(@namespace)) throw new ArgumentNullException(nameof(@namespace));
-            if (format < ConfigFileFormat.Properties || format > ConfigFileFormat.Txt) throw new ArgumentOutOfRangeException(nameof(format), format, $"最小值{ConfigFileFormat.Properties}，最大值{ConfigFileFormat.Txt}");
+            if (string.IsNullOrWhiteSpace(@namespace))
+            {
+                throw new ArgumentNullException(nameof(@namespace));
+            }
 
-            if (format != ConfigFileFormat.Properties) @namespace += "." + format.ToString().ToLower();
+            if (format < ConfigFileFormat.Properties || format > ConfigFileFormat.Txt)
+            {
+                throw new ArgumentOutOfRangeException(nameof(format), format, $"最小值{ConfigFileFormat.Properties}，最大值{ConfigFileFormat.Txt}");
+            }
 
+            if (format != ConfigFileFormat.Properties)
+            {
+                @namespace += "." + format.ToString().ToLower();
+            }
 
             var configRepository = builder.ConfigRepositoryFactory.GetConfigRepository(@namespace);
             var previous = builder.Sources.FirstOrDefault(source => source is ApolloConfigurationProvider apollo &&

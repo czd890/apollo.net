@@ -10,6 +10,10 @@
     <RootNamespace>Com.Ctrip.Framework.Apollo.ConfigAdapter</RootNamespace>
     <TargetFrameworks>net45;netstandard2.0</TargetFrameworks>
     <Version>2.0.0</Version>
+    <PackageId>Xignite.Apollo.ConfigAdapter.Yaml</PackageId>
+    <Authors>Xignite.Apollo.ConfigAdapter.Yaml</Authors>
+    <Company>Xignite.Apollo.ConfigAdapter.Yaml</Company>
+    <Product>Xignite.Apollo.ConfigAdapter.Yaml</Product>
   </PropertyGroup>
 
   <ItemGroup>

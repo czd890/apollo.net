@@ -25,6 +25,10 @@ $(PackageReleaseNotes)</Description>
     <PackageTags>$(PackageTags) ConfigurationBuilder ConfigurationManager</PackageTags>
     <TargetFrameworks>net471;net45;netstandard2.0</TargetFrameworks>
     <Version>2.0.3</Version>
+    <PackageId>Xignite.Apollo.ConfigurationManager</PackageId>
+    <Authors>Xignite.Apollo.ConfigurationManager</Authors>
+    <Company>Xignite.Apollo.ConfigurationManager</Company>
+    <Product>Xignite.Apollo.ConfigurationManager</Product>
   </PropertyGroup>
 
   <ItemGroup>
