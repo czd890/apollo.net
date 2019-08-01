@@ -18,7 +18,7 @@ namespace Com.Ctrip.Framework.Apollo
     {
         private static IConfigManager _manager;
 
-        public static IConfigManager Manager => _manager ?? throw new InvalidOperationException("请在使用之前调用AddApollo");
+        public static IConfigManager Manager => _manager ?? throw new InvalidOperationException("Please invoke 'AddApollo(options)' init apollo at the beginning.");
 
         internal static void SetApolloOptions(ConfigRepositoryFactory factory) =>
             Interlocked.CompareExchange(ref _manager, new DefaultConfigManager(new DefaultConfigRegistry(), factory), null);

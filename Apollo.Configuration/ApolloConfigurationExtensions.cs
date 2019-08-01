@@ -25,7 +25,7 @@ namespace Microsoft.Extensions.Configuration
         {
             if (builder.Properties[typeof(ApolloConfigurationExtensions).FullName] is ApolloConfigurationBuilder b)
             {
-                return b;
+                throw new InvalidOperationException("Do not repeat init apollo");
             }
             var repositoryFactory = new ConfigRepositoryFactory(options ?? throw new ArgumentNullException(nameof(options)));
 #pragma warning disable 618
@@ -34,6 +34,17 @@ namespace Microsoft.Extensions.Configuration
             var apolloBuilder = new ApolloConfigurationBuilder(builder, repositoryFactory);
             builder.Properties[typeof(ApolloConfigurationExtensions).FullName] = apolloBuilder;
             return apolloBuilder;
+        }
+
+        public static IApolloConfigurationBuilder AddApollo(this IConfigurationBuilder builder)
+        {
+            if (!builder.Properties.ContainsKey(typeof(ApolloConfigurationExtensions).FullName))
+            {
+                throw new InvalidOperationException("Please invoke 'AddApollo(options)' init apollo at the beginning.");
+            }
+
+            return builder.Properties[typeof(ApolloConfigurationExtensions).FullName] as ApolloConfigurationBuilder;
+
         }
     }
 }
@@ -64,7 +75,7 @@ namespace Com.Ctrip.Framework.Apollo
 
             if (format < ConfigFileFormat.Properties || format > ConfigFileFormat.Txt)
             {
-                throw new ArgumentOutOfRangeException(nameof(format), format, $"最小值{ConfigFileFormat.Properties}，最大值{ConfigFileFormat.Txt}");
+                throw new ArgumentOutOfRangeException(nameof(format), format, $"minValue:{ConfigFileFormat.Properties}，maxValue:{ConfigFileFormat.Txt}");
             }
 
             if (format != ConfigFileFormat.Properties)
