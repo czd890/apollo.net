@@ -23,7 +23,7 @@ namespace Microsoft.Extensions.Configuration
 
         public static IApolloConfigurationBuilder AddApollo(this IConfigurationBuilder builder, IApolloOptions options)
         {
-            if (builder.Properties[typeof(ApolloConfigurationExtensions).FullName] is ApolloConfigurationBuilder b)
+            if (builder.Properties.ContainsKey(typeof(ApolloConfigurationExtensions).FullName))
             {
                 throw new InvalidOperationException("Do not repeat init apollo");
             }

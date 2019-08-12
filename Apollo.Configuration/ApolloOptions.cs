@@ -25,7 +25,9 @@ namespace Com.Ctrip.Framework.Apollo
             set
             {
                 if (LocalCacheDir == null)
+                {
                     LocalCacheDir = Path.Combine(ConfigConsts.DefaultLocalCacheDir, value);
+                }
 
                 _appId = value;
             }
@@ -43,7 +45,9 @@ namespace Com.Ctrip.Framework.Apollo
                 _dataCenter = value;
 
                 if (string.IsNullOrEmpty(_cluster) && !string.IsNullOrEmpty(_dataCenter))
+                {
                     _cluster = _dataCenter;
+                }
             }
         }
 
@@ -56,17 +60,35 @@ namespace Com.Ctrip.Framework.Apollo
         /// <summary>Default Dev</summary>
         public virtual Env Env { get; set; } = Env.Dev;
 
-        public virtual string LocalIp { get; set; } = NetworkInterfaceManager.HostIp;
+        private string _localIp;
+        public virtual string LocalIp
+        {
+            get
+            {
+                if (_localIp == null)
+                {
+                    _localIp = NetworkInterfaceManager.GetHostIp(this.PreferLocalIpAddress);
+                }
+                return _localIp;
+            }
+            set => _localIp = value;
+        }
 
         /// <summary>Default http://localhost:8080</summary>
         public virtual string MetaServer
         {
             get
             {
-                if (!string.IsNullOrWhiteSpace(_metaServer)) return _metaServer;
+                if (!string.IsNullOrWhiteSpace(_metaServer))
+                {
+                    return _metaServer;
+                }
 
                 if (Meta != null && Meta.TryGetValue(Env.ToString(), out var meta)
-                    && !string.IsNullOrWhiteSpace(meta)) return meta;
+                    && !string.IsNullOrWhiteSpace(meta))
+                {
+                    return meta;
+                }
 
                 return ConfigConsts.DefaultMetaServerUrl;
             }
@@ -86,5 +108,7 @@ namespace Com.Ctrip.Framework.Apollo
         public IDictionary<string, string> Meta { get; set; } = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
 
         public Func<HttpMessageHandler> HttpMessageHandlerFactory { get; set; }
+
+        public string PreferLocalIpAddress { get; set; }
     }
 }

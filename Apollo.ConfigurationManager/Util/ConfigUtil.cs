@@ -24,7 +24,10 @@ namespace Com.Ctrip.Framework.Apollo.Util
 
         public ConfigUtil()
         {
-            if (AppSettings == null) AppSettings = ConfigurationManager.AppSettings;
+            if (AppSettings == null)
+            {
+                AppSettings = ConfigurationManager.AppSettings;
+            }
 
             InitRefreshInterval();
             InitTimeout();
@@ -42,13 +45,19 @@ namespace Com.Ctrip.Framework.Apollo.Util
 
             var value = AppSettings[key1];
             if (string.IsNullOrEmpty(value))
+            {
                 value = AppSettings[key2];
+            }
 
             if (string.IsNullOrEmpty(value))
+            {
                 value = Environment.GetEnvironmentVariable(key1);
+            }
 
             if (string.IsNullOrEmpty(value))
+            {
                 value = Environment.GetEnvironmentVariable(key2);
+            }
 
             return string.IsNullOrEmpty(value) ? null : value;
         }
@@ -85,11 +94,15 @@ namespace Com.Ctrip.Framework.Apollo.Util
 
             //Use data center as cluster
             if (string.IsNullOrWhiteSpace(Cluster))
+            {
                 Cluster = DataCenter;
+            }
 
             //Use default cluster
             if (string.IsNullOrWhiteSpace(Cluster))
+            {
                 Cluster = ConfigConsts.ClusterNameDefault;
+            }
         }
 
         /// <summary>
@@ -103,8 +116,8 @@ namespace Com.Ctrip.Framework.Apollo.Util
         /// </summary>
         /// <returns> the env </returns>
         public Env Env => Enum.TryParse(GetAppConfig("Env"), true, out Env env) ? env : Env.Dev;
-
-        public string LocalIp { get; set; } = NetworkInterfaceManager.HostIp;
+        public string PreferLocalIpAddress => GetAppConfig("PreferLocalIpAddress");
+        public string LocalIp { get; set; } = NetworkInterfaceManager.GetHostIp(GetAppConfig("PreferLocalIpAddress"));
 
         public string MetaServer => GetAppConfig("MetaServer") ?? MetaDomainConsts.GetDomain(Env);
 
@@ -114,7 +127,10 @@ namespace Com.Ctrip.Framework.Apollo.Util
         {
             var customizedTimeout = GetAppConfig("Timeout");
 
-            if (int.TryParse(customizedTimeout, out _timeout)) return;
+            if (int.TryParse(customizedTimeout, out _timeout))
+            {
+                return;
+            }
 
             _timeout = 5000;
 
@@ -130,7 +146,10 @@ namespace Com.Ctrip.Framework.Apollo.Util
         {
             var customizedRefreshInterval = GetAppConfig("RefreshInterval");
 
-            if (int.TryParse(GetAppConfig("RefreshInterval"), out _refreshInterval)) return;
+            if (int.TryParse(GetAppConfig("RefreshInterval"), out _refreshInterval))
+            {
+                return;
+            }
 
             _refreshInterval = 5 * 60 * 1000;
 
@@ -143,6 +162,10 @@ namespace Com.Ctrip.Framework.Apollo.Util
 
         public Func<HttpMessageHandler> HttpMessageHandlerFactory => _httpMessageHandlerFactory;
 
-        public static void UseHttpMessageHandlerFactory(Func<HttpMessageHandler> factory) => Interlocked.CompareExchange(ref _httpMessageHandlerFactory, factory, null);
+
+        public static void UseHttpMessageHandlerFactory(Func<HttpMessageHandler> factory)
+        {
+            Interlocked.CompareExchange(ref _httpMessageHandlerFactory, factory, null);
+        }
     }
 }

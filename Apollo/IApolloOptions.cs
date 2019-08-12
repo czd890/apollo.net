@@ -28,6 +28,7 @@ namespace Com.Ctrip.Framework.Apollo
 
         string LocalIp { get; }
 
+        string PreferLocalIpAddress { get; }
         string MetaServer { get; }
 
         IReadOnlyCollection<string> ConfigServer { get; }
