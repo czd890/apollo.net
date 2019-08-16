@@ -67,11 +67,11 @@ namespace Com.Ctrip.Framework.Apollo
             {
                 if (_localIp == null)
                 {
-                    _localIp = NetworkInterfaceManager.GetHostIp(this.PreferLocalIpAddress);
+                    return NetworkInterfaceManager.GetHostIp(this.PreferLocalIpAddress);
                 }
                 return _localIp;
             }
-            set => _localIp = value;
+            set => _localIp = value == NetworkInterfaceManager.HostIp ? null : value;
         }
 
         /// <summary>Default http://localhost:8080</summary>
