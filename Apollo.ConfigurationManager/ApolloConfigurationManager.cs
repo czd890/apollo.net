@@ -20,7 +20,20 @@ namespace Com.Ctrip.Framework.Apollo
 #endif
     public static class ApolloConfigurationManager
     {
-        public static IConfigManager Manager { get; } = new DefaultConfigManager(new DefaultConfigRegistry(), new ConfigRepositoryFactory(new ConfigUtil()));
+        private static readonly Exception Exception;
+        public static IConfigManager Manager { get; }
+
+        static ApolloConfigurationManager()
+        {
+            try
+            {
+                Manager = new DefaultConfigManager(new DefaultConfigRegistry(), new ConfigRepositoryFactory(new ConfigUtil()));
+            }
+            catch (Exception e)
+            {
+                Exception = e;
+            }
+        }
 
         /// <summary>
         /// Get Application's config instance. </summary>
@@ -33,7 +46,9 @@ namespace Com.Ctrip.Framework.Apollo
         /// <returns> config instance </returns>
         public static Task<IConfig> GetConfig([NotNull]string namespaceName)
         {
-            if (string.IsNullOrEmpty(namespaceName)) throw new ArgumentException("message", nameof(namespaceName));
+            if (string.IsNullOrEmpty(namespaceName)) throw new ArgumentNullException(nameof(namespaceName));
+
+            if (Exception != null) throw new InvalidOperationException("Apollo初始化异常", Exception);
 
             return Manager.GetConfig(namespaceName);
         }

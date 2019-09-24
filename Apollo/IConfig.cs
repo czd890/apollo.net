@@ -1,6 +1,7 @@
 ﻿using Com.Ctrip.Framework.Apollo.Model;
 using System.Collections.Generic;
 
+#nullable enable
 namespace Com.Ctrip.Framework.Apollo
 {
     /// <summary>
@@ -8,7 +9,7 @@ namespace Com.Ctrip.Framework.Apollo
     /// </summary>
     /// <param name="sender"> the sender </param>
     /// <param name="args"> the changes </param>
-    public delegate void ConfigChangeEvent(object sender, ConfigChangeEventArgs args);
+    public delegate void ConfigChangeEvent(IConfig sender, ConfigChangeEventArgs args);
 
     public interface IConfig
     {
@@ -16,7 +17,7 @@ namespace Com.Ctrip.Framework.Apollo
         /// <param name="key"> the property name </param>
         /// <param name="value"> the value </param>
         /// <returns> true: the key is found; false the key is not found </returns>
-        bool TryGetProperty(string key, out string value);
+        bool TryGetProperty(string? key, out string? value);
 
         /// <summary>
         /// Return a set of the property names

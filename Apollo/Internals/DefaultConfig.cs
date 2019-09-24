@@ -64,13 +64,13 @@ namespace Com.Ctrip.Framework.Apollo.Internals
                 //check double checked result
                 if (actualChanges.Count == 0) return;
 
-                FireConfigChange(_namespace, actualChanges);
+                FireConfigChange(actualChanges);
             }
         }
 
         private IReadOnlyDictionary<string, ConfigChange> UpdateAndCalcConfigChanges(Properties newConfigProperties)
         {
-            var configChanges = CalcPropertyChanges(_namespace, _configProperties, newConfigProperties);
+            var configChanges = CalcPropertyChanges(_configProperties, newConfigProperties);
 
             var actualChanges = new Dictionary<string, ConfigChange>();
 
