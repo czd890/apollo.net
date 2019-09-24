@@ -1,31 +1,28 @@
-﻿
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <AssemblyName>Com.Ctrip.Framework.Apollo.ConfigurationManager</AssemblyName>
-    <PackageReleaseNotes>2.1.0:
-    1. 无
-2.0.5:
-    1. ApolloConfigurationManager初始化异常后，每次调用抛出有意义的异常
-2.0.4:
-    1. AppSettingsSectionBuilder默认强制更新（forceUpdate属性配置）AppSettings，实现ConfigurationManager.AppSettings的动态更新（其他的仍然不支持动态更新）
-2.0.3:
-    1. 无
-2.0.2:
-    1. ApolloConfigurationManager标记为Obsolete
-2.0.1:
-    1. 过滤重复的Namespace
-2.0.0:
-    1. 添加json、xml等格式的namespace的支持，通过扩展名识别格式
-    2. 支持从环境变量读取apollo配置值
-    3. 添加对.net core风格key支持，优先级低于原来的key</PackageReleaseNotes>
-    <Description>携程Apollo客户端
+    <PackageReleaseNotes>
+      2.0.5:
+          1. If ApolloConfigurationManager initializing the exception，Each call throws a meaningful exceptions.
+      2.0.4:
+          1. AppSettingsSectionBuilder Default Force Update Property Configuration App Settings to implement dynamic updates of ConfigurationManager.AppSettings (others still do not support dynamic updates)
+      2.0.2:
+          1. ApolloConfigurationManager is marked Obsolete
+      2.0.1:
+          1. Filtering duplicate Namespace
+      2.0.0:
+          1. Adding namespace support in json, XML and other formats
+          2. Support for reading Apollo configuration values from environment variables
+          3. Add support for netcore style key. Priority is lower than the original key
+    </PackageReleaseNotes>
+    <Description>
+      Xignite Apollo Client SDK
+      　To integrate with Microsoft.Extensions.Configuration, use the Xignite.Apollo.Configuration package.
+      　To integrate with System.Configuration.ConfigurationManager(.net 4.7.1+),use the Xignite.Apollo.ConfigurationManager package.
 
-　　与Microsoft.Extensions.Configuration集成请使用Com.Ctrip.Framework.Apollo.Configuration包
-　　与System.Configuration.ConfigurationManager集成(.net 4.7.1及以后版本)请使用Com.Ctrip.Framework.Apollo.ConfigurationManager包
-　　直接使用ApolloConfigurationManager请使用Com.Ctrip.Framework.Apollo.Configuration或者Com.Ctrip.Framework.Apollo.ConfigurationManager
-
-$(PackageReleaseNotes)</Description>
+      $(PackageReleaseNotes)
+    </Description>
     <PackageIconUrl>https://raw.githubusercontent.com/ctripcorp/apollo/master/apollo-portal/src/main/resources/static/img/config.png</PackageIconUrl>
     <PackageProjectUrl>$(RepositoryUrl)/$(AssemblyName)</PackageProjectUrl>
     <PackageTags>$(PackageTags) ConfigurationBuilder ConfigurationManager</PackageTags>

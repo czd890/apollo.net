@@ -6,7 +6,7 @@ namespace Com.Ctrip.Framework.Apollo.Util
 {
     static class QueryUtils
     {
-        //不要使用HttpUtility.ParseQueryString()，netfx里会和问题
+        //Don't use HttpUtility.ParseQueryString(), netfx will have problems
         public static string Build(IReadOnlyCollection<KeyValuePair<string, string>> source)
         {
             if (source == null || source.Count == 0)

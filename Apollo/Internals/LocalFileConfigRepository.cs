@@ -88,8 +88,6 @@ namespace Com.Ctrip.Framework.Apollo.Internals
                 _upstream?.Dispose();
             }
 
-            //释放非托管资源
-
             _disposed = true;
         }
 

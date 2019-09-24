@@ -258,8 +258,6 @@ namespace Com.Ctrip.Framework.Apollo.Internals
                 _remoteConfigLongPollService.Dispose();
             }
 
-            //释放非托管资源
-
             _disposed = true;
         }
     }

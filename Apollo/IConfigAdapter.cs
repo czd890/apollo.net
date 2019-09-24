@@ -23,7 +23,7 @@ namespace Com.Ctrip.Framework.Apollo
             var content = properties.GetProperty(ConfigConsts.ConfigFileContentKey);
             if (string.IsNullOrWhiteSpace(content))
             {
-                Logger().Warn("找不到" + ConfigConsts.ConfigFileContentKey);
+                Logger().Warn($"Can not find '{ConfigConsts.ConfigFileContentKey}'.");
 
                 return properties;
             }

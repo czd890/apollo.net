@@ -13,7 +13,7 @@ namespace Com.Ctrip.Framework.Apollo
     /// <summary>
     /// Entry point for client config use
     /// </summary>
-    [Obsolete("不建议使用，推荐使用Microsoft.Extensions.Configuration.IConfiguration")]
+    [Obsolete("Not recommended for use，Recommended use Microsoft.Extensions.Configuration.IConfiguration")]
     public class ApolloConfigurationManager
     {
         private static IConfigManager _manager;

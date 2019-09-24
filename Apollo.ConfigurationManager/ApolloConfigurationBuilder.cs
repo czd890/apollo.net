@@ -21,7 +21,7 @@ namespace Com.Ctrip.Framework.Apollo
         {
             Namespaces = config["namespace"]?.Split(new[] { ';', ',' }, StringSplitOptions.RemoveEmptyEntries);
 
-            if (!(this is AppSettingsSectionBuilder)) _ = ConfigurationManager.AppSettings; //让AppSettings必须最先被初始化
+            if (!(this is AppSettingsSectionBuilder)) _ = ConfigurationManager.AppSettings; //App Settings must be initialized first
 
             base.Initialize(name, config);
         }

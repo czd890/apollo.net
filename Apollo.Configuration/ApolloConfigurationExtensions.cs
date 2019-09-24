@@ -53,19 +53,16 @@ namespace Com.Ctrip.Framework.Apollo
 {
     public static class ApolloConfigurationBuilderExtensions
     {
-        /// <summary>添加默认namespace: application，等价于AddNamespace(ConfigConsts.NamespaceApplication)</summary>
         public static IApolloConfigurationBuilder AddDefault(this IApolloConfigurationBuilder builder, ConfigFileFormat format = ConfigFileFormat.Properties)
         {
             return builder.AddNamespace(ConfigConsts.NamespaceApplication, null, format);
         }
 
-        /// <summary>添加其他namespace</summary>
         public static IApolloConfigurationBuilder AddNamespace(this IApolloConfigurationBuilder builder, string @namespace, ConfigFileFormat format = ConfigFileFormat.Properties)
         {
             return builder.AddNamespace(@namespace, null, format);
         }
 
-        /// <summary>添加其他namespace。如果sectionKey为null则添加到root中，可以直接读取，否则使用Configuration.GetSection(sectionKey)读取</summary>
         public static IApolloConfigurationBuilder AddNamespace(this IApolloConfigurationBuilder builder, string @namespace, string sectionKey, ConfigFileFormat format = ConfigFileFormat.Properties)
         {
             if (string.IsNullOrWhiteSpace(@namespace))

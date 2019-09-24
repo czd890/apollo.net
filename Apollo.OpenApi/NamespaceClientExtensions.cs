@@ -9,7 +9,6 @@ namespace Com.Ctrip.Framework.Apollo.OpenApi
 {
     public static class NamespaceClientExtensions
     {
-        /// <summary>获取信息</summary>
         public static Task<Namespace?> GetNamespaceInfo([NotNull] this INamespaceClient client,
             CancellationToken cancellationToken = default)
         {
@@ -18,7 +17,6 @@ namespace Com.Ctrip.Framework.Apollo.OpenApi
             return client.Get<Namespace>($"envs/{client.Env}/apps/{client.AppId}/clusters/{client.Cluster}/namespaces/{client.Namespace}", cancellationToken);
         }
 
-        /// <summary>获取当前编辑人</summary>
         public static Task<NamespaceLock?> GetNamespaceLock([NotNull] this INamespaceClient client,
             CancellationToken cancellationToken = default)
         {
@@ -27,7 +25,6 @@ namespace Com.Ctrip.Framework.Apollo.OpenApi
             return client.Get<NamespaceLock>($"envs/{client.Env}/apps/{client.AppId}/clusters/{client.Cluster}/namespaces/{client.Namespace}/lock", cancellationToken);
         }
 
-        /// <summary>获取配置</summary>
         public static Task<Item?> GetItem([NotNull] this INamespaceClient client,
             [NotNull] string key, CancellationToken cancellationToken = default)
         {
@@ -37,7 +34,6 @@ namespace Com.Ctrip.Framework.Apollo.OpenApi
             return client.Get<Item>($"envs/{client.Env}/apps/{client.AppId}/clusters/{client.Cluster}/namespaces/{client.Namespace}/items/{key}", cancellationToken);
         }
 
-        /// <summary>新增配置</summary>
         public static Task<Item> CreateItem([NotNull] this INamespaceClient client,
             [NotNull] Item item, CancellationToken cancellationToken = default)
         {
@@ -49,7 +45,6 @@ namespace Com.Ctrip.Framework.Apollo.OpenApi
             return client.Post<Item>($"envs/{client.Env}/apps/{client.AppId}/clusters/{client.Cluster}/namespaces/{client.Namespace}/items", item, cancellationToken);
         }
 
-        /// <summary>修改配置</summary>
         public static Task UpdateItem([NotNull] this INamespaceClient client,
             [NotNull] Item item, CancellationToken cancellationToken = default)
         {
@@ -61,7 +56,6 @@ namespace Com.Ctrip.Framework.Apollo.OpenApi
             return client.Put<Item>($"envs/{client.Env}/apps/{client.AppId}/clusters/{client.Cluster}/namespaces/{client.Namespace}/items/{item.Key}", item, cancellationToken);
         }
 
-        /// <summary>创建或修改配置</summary>
         public static Task<Item> CreateOrUpdateItem([NotNull] this INamespaceClient client,
             [NotNull] Item item, CancellationToken cancellationToken = default)
         {
@@ -76,8 +70,6 @@ namespace Com.Ctrip.Framework.Apollo.OpenApi
             return client.Put<Item>($"envs/{client.Env}/apps/{client.AppId}/clusters/{client.Cluster}/namespaces/{client.Namespace}/items/{item.Key}?createIfNotExists=true", item, cancellationToken);
         }
 
-        /// <summary>删除配置</summary>
-        /// <returns>存在时删除后返回true，或者返回false</returns>
         public static Task<bool> RemoveItem([NotNull] this INamespaceClient client, [NotNull] string key,
             [NotNull] string @operator, CancellationToken cancellationToken = default)
         {
@@ -88,7 +80,6 @@ namespace Com.Ctrip.Framework.Apollo.OpenApi
             return client.Delete($"envs/{client.Env}/apps/{client.AppId}/clusters/{client.Cluster}/namespaces/{client.Namespace}/items/{key}?operator={WebUtility.UrlEncode(@operator)}", cancellationToken);
         }
 
-        /// <summary>发布配置</summary>
         public static Task<Release> Publish([NotNull] this INamespaceClient client,
             [NotNull] NamespaceRelease release, CancellationToken cancellationToken = default)
         {
@@ -100,7 +91,6 @@ namespace Com.Ctrip.Framework.Apollo.OpenApi
             return client.Post<Release>($"envs/{client.Env}/apps/{client.AppId}/clusters/{client.Cluster}/namespaces/{client.Namespace}/releases", release, cancellationToken);
         }
 
-        /// <summary>获取当前生效的已发布配置接口</summary>
         public static Task<Release?> GetLatestActiveRelease([NotNull] this INamespaceClient client,
             CancellationToken cancellationToken = default)
         {

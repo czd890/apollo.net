@@ -18,9 +18,9 @@ namespace Apollo.AspNetCore.Demo
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
-               //.ConfigureAppConfiguration((context, builder) => builder //使用环境变量、命令行之类，建议Docker中运行使用此方式
+               //.ConfigureAppConfiguration((context, builder) => builder //Using environment variables, command lines, etc., it is recommended that Docker run in this way
                //     .AddApollo(context.Configuration.GetSection("apollo"))
-               .ConfigureAppConfiguration(builder => builder //普通方式，一般配置在appsettings.json中
+               .ConfigureAppConfiguration(builder => builder //Ordinary, generally configured in appsettings. JSON
                    .AddApollo(builder.Build().GetSection("apollo"))
                     .AddDefault(ConfigFileFormat.Xml)
                     .AddDefault(ConfigFileFormat.Json)
