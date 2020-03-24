@@ -2,8 +2,8 @@
 <#@ output extension=".generated.cs" #>
 using Com.Ctrip.Framework.Apollo.Exceptions;
 using Com.Ctrip.Framework.Apollo.Logging;
-using JetBrains.Annotations;
 using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Com.Ctrip.Framework.Apollo
 {
@@ -18,7 +18,8 @@ namespace Com.Ctrip.Framework.Apollo
         /// <param name="key"> the property name </param>
         /// <param name="defaultValue"> the default value when key is not found or any error occurred </param>
         /// <returns> the property value as <#= type #> </returns>
-        public static <#= type #>? GetProperty([NotNull]this IConfig config, string key, <#= type #>? defaultValue)
+        [return: NotNullIfNotNull("defaultValue")]
+        public static <#= type #>? GetProperty(this IConfig config, string key, <#= type #>? defaultValue)
         {
             if (config == null) throw new ArgumentNullException(nameof(config));
 

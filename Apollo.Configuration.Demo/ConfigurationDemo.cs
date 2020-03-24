@@ -8,7 +8,7 @@ using System;
 
 namespace Apollo.Configuration.Demo
 {
-    class ConfigurationDemo
+    internal class ConfigurationDemo
     {
         private static readonly IConfiguration Configuration;
         static ConfigurationDemo()
@@ -82,7 +82,7 @@ namespace Apollo.Configuration.Demo
 
         private class Value
         {
-            public string Timeout { get; set; }
+            public string Timeout { get; set; } = "";
         }
     }
 }

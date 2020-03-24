@@ -1,7 +1,7 @@
 ﻿using Com.Ctrip.Framework.Apollo.Exceptions;
 using Com.Ctrip.Framework.Apollo.Logging;
-using JetBrains.Annotations;
 using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Com.Ctrip.Framework.Apollo
 {
@@ -14,7 +14,8 @@ namespace Com.Ctrip.Framework.Apollo
         /// <param name="key"> the property name </param>
         /// <param name="defaultValue"> the default value when key is not found or any error occurred </param>
         /// <returns> the property value as int </returns>
-        public static int? GetProperty([NotNull]this IConfig config, string key, int? defaultValue)
+        [return: NotNullIfNotNull("defaultValue")]
+        public static int? GetProperty(this IConfig config, string key, int? defaultValue)
         {
             if (config == null) throw new ArgumentNullException(nameof(config));
 
@@ -33,7 +34,8 @@ namespace Com.Ctrip.Framework.Apollo
         /// <param name="key"> the property name </param>
         /// <param name="defaultValue"> the default value when key is not found or any error occurred </param>
         /// <returns> the property value as long </returns>
-        public static long? GetProperty([NotNull]this IConfig config, string key, long? defaultValue)
+        [return: NotNullIfNotNull("defaultValue")]
+        public static long? GetProperty(this IConfig config, string key, long? defaultValue)
         {
             if (config == null) throw new ArgumentNullException(nameof(config));
 
@@ -52,7 +54,8 @@ namespace Com.Ctrip.Framework.Apollo
         /// <param name="key"> the property name </param>
         /// <param name="defaultValue"> the default value when key is not found or any error occurred </param>
         /// <returns> the property value as short </returns>
-        public static short? GetProperty([NotNull]this IConfig config, string key, short? defaultValue)
+        [return: NotNullIfNotNull("defaultValue")]
+        public static short? GetProperty(this IConfig config, string key, short? defaultValue)
         {
             if (config == null) throw new ArgumentNullException(nameof(config));
 
@@ -71,7 +74,8 @@ namespace Com.Ctrip.Framework.Apollo
         /// <param name="key"> the property name </param>
         /// <param name="defaultValue"> the default value when key is not found or any error occurred </param>
         /// <returns> the property value as float </returns>
-        public static float? GetProperty([NotNull]this IConfig config, string key, float? defaultValue)
+        [return: NotNullIfNotNull("defaultValue")]
+        public static float? GetProperty(this IConfig config, string key, float? defaultValue)
         {
             if (config == null) throw new ArgumentNullException(nameof(config));
 
@@ -90,7 +94,8 @@ namespace Com.Ctrip.Framework.Apollo
         /// <param name="key"> the property name </param>
         /// <param name="defaultValue"> the default value when key is not found or any error occurred </param>
         /// <returns> the property value as double </returns>
-        public static double? GetProperty([NotNull]this IConfig config, string key, double? defaultValue)
+        [return: NotNullIfNotNull("defaultValue")]
+        public static double? GetProperty(this IConfig config, string key, double? defaultValue)
         {
             if (config == null) throw new ArgumentNullException(nameof(config));
 
@@ -109,7 +114,8 @@ namespace Com.Ctrip.Framework.Apollo
         /// <param name="key"> the property name </param>
         /// <param name="defaultValue"> the default value when key is not found or any error occurred </param>
         /// <returns> the property value as sbyte </returns>
-        public static sbyte? GetProperty([NotNull]this IConfig config, string key, sbyte? defaultValue)
+        [return: NotNullIfNotNull("defaultValue")]
+        public static sbyte? GetProperty(this IConfig config, string key, sbyte? defaultValue)
         {
             if (config == null) throw new ArgumentNullException(nameof(config));
 
@@ -128,7 +134,8 @@ namespace Com.Ctrip.Framework.Apollo
         /// <param name="key"> the property name </param>
         /// <param name="defaultValue"> the default value when key is not found or any error occurred </param>
         /// <returns> the property value as bool </returns>
-        public static bool? GetProperty([NotNull]this IConfig config, string key, bool? defaultValue)
+        [return: NotNullIfNotNull("defaultValue")]
+        public static bool? GetProperty(this IConfig config, string key, bool? defaultValue)
         {
             if (config == null) throw new ArgumentNullException(nameof(config));
 

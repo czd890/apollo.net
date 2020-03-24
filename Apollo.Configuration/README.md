@@ -1,7 +1,7 @@
 ﻿# 一、准备工作
 
 ## 1.1 环境要求
-    
+
 * [NETStandard 2.0](https://github.com/dotnet/standard/blob/master/docs/versions/netstandard2.0.md#platform-support)
 
 ## 1.2 必选设置
@@ -76,10 +76,10 @@ Apollo客户端针对不同的环境会从不同的服务器获取配置，所�
 {
   "apollo": {
     "Meta": {
-      "DEV": "http://106.12.25.204:8080/",
-      "FAT": "http://106.12.25.204:8080/",
-      "UAT": "http://106.12.25.204:8080/",
-      "PRO": "http://106.12.25.204:8080/"
+      "DEV": "http://106.54.227.205:8080/",
+      "FAT": "http://106.54.227.205:8080/",
+      "UAT": "http://106.54.227.205:8080/",
+      "PRO": "http://106.54.227.205:8080/"
     }
   }
 }
@@ -218,12 +218,12 @@ services.ConfigureJsonValue<Options>(/*name, */config.GetSection("somePrefix:Jso
 
 ## 4.3 如何跳过meta service的服务发现
 
-在读取任何配置之前执行如下代码
+> 用于解决apollo服务端部署在docker中时，不能在容器外面获取配置的问题。也可以[直接指定IP或IP+Port](https://github.com/ctripcorp/apollo/wiki/%E5%88%86%E5%B8%83%E5%BC%8F%E9%83%A8%E7%BD%B2%E6%8C%87%E5%8D%97#14网络策略)
 
 ``` diff
 {
     "apollo": {
-+       "ConfigServer": ["http://106.12.25.204:8080/"]
++       "ConfigServer": ["http://106.54.227.205:8080/"]
     }
 }
 ```

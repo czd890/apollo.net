@@ -1,16 +1,15 @@
 ﻿using Com.Ctrip.Framework.Apollo.Exceptions;
 using Com.Ctrip.Framework.Apollo.Logging;
-using JetBrains.Annotations;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Text.RegularExpressions;
 
-#nullable enable
 namespace Com.Ctrip.Framework.Apollo
 {
     public static partial class ConfigExtensions
     {
-        private static readonly Func<Action<LogLevel, string, Exception>> Logger = () => LogManager.CreateLogger(typeof(ConfigExtensions));
+        private static readonly Func<Action<LogLevel, string, Exception?>> Logger = () => LogManager.CreateLogger(typeof(ConfigExtensions));
 
         /// <summary>
         /// Return the property value with the given key, or
@@ -19,7 +18,8 @@ namespace Com.Ctrip.Framework.Apollo
         /// <param name="key"> the property name </param>
         /// <param name="defaultValue"> the default value when key is not found or any error occurred </param>
         /// <returns> the property value </returns>
-        public static string? GetProperty([NotNull]this IConfig config, string? key, string? defaultValue)
+        [return: NotNullIfNotNull("defaultValue")]
+        public static string? GetProperty(this IConfig config, string key, string? defaultValue)
         {
             if (config == null) throw new ArgumentNullException(nameof(config));
 
@@ -35,7 +35,12 @@ namespace Com.Ctrip.Framework.Apollo
         /// <param name="delimiter"> the delimeter regex </param>
         /// <param name="defaultValue"> the default value when key is not found or any error occurred </param>
         /// <returns> the property value as array </returns>
-        public static IReadOnlyList<string?>? GetProperty([NotNull]this IConfig config, string? key, string delimiter, string?[]? defaultValue)
+        [return: NotNullIfNotNull("defaultValue")]
+#if NET40
+        public static string?[]? GetProperty(this IConfig config, string key, string delimiter, string?[]? defaultValue)
+#else
+        public static IReadOnlyList<string?>? GetProperty(this IConfig config, string key, string delimiter, IReadOnlyList<string?>? defaultValue)
+#endif
         {
             if (config == null) throw new ArgumentNullException(nameof(config));
 
