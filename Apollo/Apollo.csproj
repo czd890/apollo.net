@@ -4,25 +4,25 @@
     <AssemblyName>Com.Ctrip.Framework.Apollo</AssemblyName>
     <PackageReleaseNotes>
       2.1.0:
-	      1. Fix ConfigServiceLocator can not refresh bug.
+      1. Fix ConfigServiceLocator can not refresh bug.
       2.0.5:
-	      1. If LogManager.CreateLogger has exceptions, returned result.
+      1. If LogManager.CreateLogger has exceptions, returned result.
       2.0.4:
-	      1. Fix ConfigChanged event args is Incorrect of MultiConfig.
-	      2. If namespace data is error, Report make sense tips.
+      1. Fix ConfigChanged event args is Incorrect of MultiConfig.
+      2. If namespace data is error, Report make sense tips.
       2.0.3:
-	      1. Fix deadlock in ConfigurationBuilder on net471
-	      2. Fix when not exists localcache and load remote is exception then throw null ref exceptions.
+      1. Fix deadlock in ConfigurationBuilder on net471
+      2. Fix when not exists localcache and load remote is exception then throw null ref exceptions.
       2.0.2:
-	      1. Fix published, is not Properties namespace can not load settings.
-	      2. Fix IConfig event can not tigger bug.
+      1. Fix published, is not Properties namespace can not load settings.
+      2. Fix IConfig event can not tigger bug.
       2.0.1:
-	      1. Fix an NullReferenceException on Concurrent.
+      1. Fix an NullReferenceException on Concurrent.
       2.0.0:
-	      1. Add json,xml support.
-	      2. Redesign IConfig
-	      3. Refactoring log
-  </PackageReleaseNotes>
+      1. Add json,xml support.
+      2. Redesign IConfig
+      3. Refactoring log
+    </PackageReleaseNotes>
     <Description>
       Xignite Apollo Client SDK
       　To integrate with Microsoft.Extensions.Configuration, use the Xignite.Apollo.Configuration package.
@@ -33,14 +33,13 @@
     <PackageIconUrl>https://raw.githubusercontent.com/ctripcorp/apollo/master/apollo-portal/src/main/resources/static/img/config.png</PackageIconUrl>
     <PackageProjectUrl>$(RepositoryUrl)/$(AssemblyName)</PackageProjectUrl>
     <RootNamespace>Com.Ctrip.Framework.Apollo</RootNamespace>
-    <TargetFrameworks>net45;netstandard2.0</TargetFrameworks>
-    <Version>2.1.1</Version>
+    <TargetFrameworks>net40;net45;netstandard2.0</TargetFrameworks>
+    <Version>2.3.0</Version>
     <PackageId>Xignite.Apollo</PackageId>
     <Authors>Xignite.Apollo</Authors>
     <Company>Xignite.Apollo</Company>
     <Product>Xignite.Apollo</Product>
   </PropertyGroup>
-
   <ItemGroup>
     <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
       <_Parameter1>Com.Ctrip.Framework.Apollo.ConfigAdapter.Yaml, PublicKey=002400000480000094000000060200000024000052534131000400000100010031b198cb1742fb12c699a60d820e6582ca8a8dbbd9383812f82bed299e06eab18931798fb14cc6ab80cda818032d15704f0e1c4aa5641b428f8a0decbfa1a30ab8d92efc7ec9cbd801f60c4b88b91c6acb704c20c6a061a7dae86601981164fb27be0c0beb3e6d5dbec1b83962a6d0b845ca09a52723237bd7083359b17830c0</_Parameter1>
@@ -77,14 +76,21 @@
     <Compile Update="Resources.Designer.cs">
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-
-    <PackageReference Include="Newtonsoft.Json" Version="11.*" Condition="'$(TargetFramework)' != 'net45'" />
+    <PackageReference Include="Newtonsoft.Json" Version="11.*" Condition="'$(TargetFrameworkIdentifier)' != '.NETFramework'" />
   </ItemGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' == 'net45'">
     <PackageReference Include="Newtonsoft.Json" Version="6.*" />
 
     <Reference Include="System.Net.Http" />
+    <Reference Include="System.Web" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)' == 'net40'">
+    <PackageReference Include="Microsoft.Bcl.Async" Version="1.*" />
+    <PackageReference Include="Microsoft.Net.Http" Version="2.*" />
+    <PackageReference Include="Newtonsoft.Json" Version="6.*" />
+
     <Reference Include="System.Web" />
   </ItemGroup>
 

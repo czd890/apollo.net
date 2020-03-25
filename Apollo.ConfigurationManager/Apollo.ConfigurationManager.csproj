@@ -32,8 +32,6 @@
     <PackageProjectUrl>$(RepositoryUrl)/$(AssemblyName)</PackageProjectUrl>
     <PackageTags>$(PackageTags) ConfigurationBuilder ConfigurationManager</PackageTags>
     <RootNamespace>Com.Ctrip.Framework.Apollo</RootNamespace>
-    <TargetFrameworks>net471;net45;net40;netstandard2.0</TargetFrameworks>
-    <Version>2.3.0</Version>
     <PackageId>Xignite.Apollo.ConfigurationManager</PackageId>
     <Authors>Xignite.Apollo.ConfigurationManager</Authors>
     <Company>Xignite.Apollo.ConfigurationManager</Company>
