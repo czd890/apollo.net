@@ -38,12 +38,11 @@ namespace Microsoft.Extensions.Configuration
 
         public static IApolloConfigurationBuilder AddApollo(this IConfigurationBuilder builder)
         {
-            if (!builder.Properties.ContainsKey(typeof(ApolloConfigurationExtensions).FullName))
+            if (!builder.Properties.TryGetValue(typeof(ApolloConfigurationExtensions).FullName, out var apolloBuilder))
             {
                 throw new InvalidOperationException("Please invoke 'AddApollo(options)' init apollo at the beginning.");
             }
-
-            return builder.Properties[typeof(ApolloConfigurationExtensions).FullName] as ApolloConfigurationBuilder;
+            return (ApolloConfigurationBuilder)apolloBuilder;
 
         }
     }
@@ -70,12 +69,14 @@ namespace Com.Ctrip.Framework.Apollo
             {
                 throw new ArgumentNullException(nameof(@namespace));
             }
-
-            if (format != ConfigFileFormat.Properties) @namespace += "." + format.GetString();
+            if (!Enum.IsDefined(typeof(ConfigFileFormat), format))
+            {
+                throw new ArgumentException("The enum value is not defined.", nameof(format));
+            }
 
             if (format != ConfigFileFormat.Properties)
             {
-                @namespace += "." + format.ToString().ToLower();
+                @namespace += "." + format.GetString();
             }
 
             var configRepository = builder.ConfigRepositoryFactory.GetConfigRepository(@namespace);
