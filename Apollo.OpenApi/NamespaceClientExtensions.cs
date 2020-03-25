@@ -1,5 +1,4 @@
 ﻿using Com.Ctrip.Framework.Apollo.OpenApi.Model;
-using JetBrains.Annotations;
 using System;
 using System.Net;
 using System.Threading;
@@ -9,7 +8,8 @@ namespace Com.Ctrip.Framework.Apollo.OpenApi
 {
     public static class NamespaceClientExtensions
     {
-        public static Task<Namespace?> GetNamespaceInfo([NotNull] this INamespaceClient client,
+        
+        public static Task<Namespace?> GetNamespaceInfo( this INamespaceClient client,
             CancellationToken cancellationToken = default)
         {
             if (client == null) throw new ArgumentNullException(nameof(client));
@@ -17,7 +17,8 @@ namespace Com.Ctrip.Framework.Apollo.OpenApi
             return client.Get<Namespace>($"envs/{client.Env}/apps/{client.AppId}/clusters/{client.Cluster}/namespaces/{client.Namespace}", cancellationToken);
         }
 
-        public static Task<NamespaceLock?> GetNamespaceLock([NotNull] this INamespaceClient client,
+        
+        public static Task<NamespaceLock?> GetNamespaceLock( this INamespaceClient client,
             CancellationToken cancellationToken = default)
         {
             if (client == null) throw new ArgumentNullException(nameof(client));
@@ -25,8 +26,9 @@ namespace Com.Ctrip.Framework.Apollo.OpenApi
             return client.Get<NamespaceLock>($"envs/{client.Env}/apps/{client.AppId}/clusters/{client.Cluster}/namespaces/{client.Namespace}/lock", cancellationToken);
         }
 
-        public static Task<Item?> GetItem([NotNull] this INamespaceClient client,
-            [NotNull] string key, CancellationToken cancellationToken = default)
+        
+        public static Task<Item?> GetItem( this INamespaceClient client,
+             string key, CancellationToken cancellationToken = default)
         {
             if (client == null) throw new ArgumentNullException(nameof(client));
             if (key == null) throw new ArgumentNullException(nameof(key));
@@ -34,8 +36,9 @@ namespace Com.Ctrip.Framework.Apollo.OpenApi
             return client.Get<Item>($"envs/{client.Env}/apps/{client.AppId}/clusters/{client.Cluster}/namespaces/{client.Namespace}/items/{key}", cancellationToken);
         }
 
-        public static Task<Item> CreateItem([NotNull] this INamespaceClient client,
-            [NotNull] Item item, CancellationToken cancellationToken = default)
+        
+        public static Task<Item> CreateItem( this INamespaceClient client,
+             Item item, CancellationToken cancellationToken = default)
         {
             if (client == null) throw new ArgumentNullException(nameof(client));
             if (item == null) throw new ArgumentNullException(nameof(item));
@@ -45,8 +48,9 @@ namespace Com.Ctrip.Framework.Apollo.OpenApi
             return client.Post<Item>($"envs/{client.Env}/apps/{client.AppId}/clusters/{client.Cluster}/namespaces/{client.Namespace}/items", item, cancellationToken);
         }
 
-        public static Task UpdateItem([NotNull] this INamespaceClient client,
-            [NotNull] Item item, CancellationToken cancellationToken = default)
+        
+        public static Task UpdateItem( this INamespaceClient client,
+             Item item, CancellationToken cancellationToken = default)
         {
             if (client == null) throw new ArgumentNullException(nameof(client));
             if (item == null) throw new ArgumentNullException(nameof(item));
@@ -56,8 +60,9 @@ namespace Com.Ctrip.Framework.Apollo.OpenApi
             return client.Put<Item>($"envs/{client.Env}/apps/{client.AppId}/clusters/{client.Cluster}/namespaces/{client.Namespace}/items/{item.Key}", item, cancellationToken);
         }
 
-        public static Task<Item> CreateOrUpdateItem([NotNull] this INamespaceClient client,
-            [NotNull] Item item, CancellationToken cancellationToken = default)
+        
+        public static Task<Item> CreateOrUpdateItem( this INamespaceClient client,
+             Item item, CancellationToken cancellationToken = default)
         {
             if (client == null) throw new ArgumentNullException(nameof(client));
             if (item == null) throw new ArgumentNullException(nameof(item));
@@ -70,8 +75,8 @@ namespace Com.Ctrip.Framework.Apollo.OpenApi
             return client.Put<Item>($"envs/{client.Env}/apps/{client.AppId}/clusters/{client.Cluster}/namespaces/{client.Namespace}/items/{item.Key}?createIfNotExists=true", item, cancellationToken);
         }
 
-        public static Task<bool> RemoveItem([NotNull] this INamespaceClient client, [NotNull] string key,
-            [NotNull] string @operator, CancellationToken cancellationToken = default)
+        public static Task<bool> RemoveItem( this INamespaceClient client,  string key,
+             string @operator, CancellationToken cancellationToken = default)
         {
             if (client == null) throw new ArgumentNullException(nameof(client));
             if (key == null) throw new ArgumentNullException(nameof(key));
@@ -80,8 +85,9 @@ namespace Com.Ctrip.Framework.Apollo.OpenApi
             return client.Delete($"envs/{client.Env}/apps/{client.AppId}/clusters/{client.Cluster}/namespaces/{client.Namespace}/items/{key}?operator={WebUtility.UrlEncode(@operator)}", cancellationToken);
         }
 
-        public static Task<Release> Publish([NotNull] this INamespaceClient client,
-            [NotNull] NamespaceRelease release, CancellationToken cancellationToken = default)
+        
+        public static Task<Release> Publish( this INamespaceClient client,
+             NamespaceRelease release, CancellationToken cancellationToken = default)
         {
             if (client == null) throw new ArgumentNullException(nameof(client));
             if (release == null) throw new ArgumentNullException(nameof(release));
@@ -91,7 +97,8 @@ namespace Com.Ctrip.Framework.Apollo.OpenApi
             return client.Post<Release>($"envs/{client.Env}/apps/{client.AppId}/clusters/{client.Cluster}/namespaces/{client.Namespace}/releases", release, cancellationToken);
         }
 
-        public static Task<Release?> GetLatestActiveRelease([NotNull] this INamespaceClient client,
+        
+        public static Task<Release?> GetLatestActiveRelease( this INamespaceClient client,
             CancellationToken cancellationToken = default)
         {
             if (client == null) throw new ArgumentNullException(nameof(client));

@@ -1,20 +1,24 @@
-﻿using JetBrains.Annotations;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using Com.Ctrip.Framework.Apollo.Core.Utils;
+﻿using Com.Ctrip.Framework.Apollo.Core.Utils;
 using Com.Ctrip.Framework.Apollo.Enums;
 using Com.Ctrip.Framework.Apollo.Model;
+using System;
+using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 
 namespace Com.Ctrip.Framework.Apollo.Internals
 {
     public class MultiConfig : AbstractConfig
     {
+#if NET40
+        private readonly ICollection<IConfig> _configs;
+#else
         private readonly IReadOnlyCollection<IConfig> _configs;
+#endif
         private Properties _configProperties;
 
         /// <param name="configs">order desc</param>
-        public MultiConfig([NotNull] IEnumerable<IConfig> configs)
+        public MultiConfig(IEnumerable<IConfig> configs)
         {
             if (configs == null) throw new ArgumentNullException(nameof(configs));
 
@@ -42,7 +46,7 @@ namespace Com.Ctrip.Framework.Apollo.Internals
             return new Properties(dic);
         }
 
-        public override bool TryGetProperty(string key, out string value)
+        public override bool TryGetProperty(string key, [NotNullWhen(true)] out string? value)
         {
             value = null;
 
@@ -62,7 +66,7 @@ namespace Com.Ctrip.Framework.Apollo.Internals
             {
                 var newConfigProperties = CombineProperties();
 
-                var actualChanges = UpdateAndCalcConfigChanges(null, newConfigProperties);
+                var actualChanges = UpdateAndCalcConfigChanges(newConfigProperties);
 
                 //check double checked result
                 if (actualChanges.Count == 0) return;
@@ -70,8 +74,11 @@ namespace Com.Ctrip.Framework.Apollo.Internals
                 FireConfigChange(actualChanges);
             }
         }
-
-        private IReadOnlyDictionary<string, ConfigChange> UpdateAndCalcConfigChanges(string _namespace, Properties newConfigProperties)
+#if NET40
+        private IDictionary<string, ConfigChange> UpdateAndCalcConfigChanges(Properties newConfigProperties)
+#else
+        private IReadOnlyDictionary<string, ConfigChange> UpdateAndCalcConfigChanges(Properties newConfigProperties)
+#endif
         {
             var configChanges = CalcPropertyChanges(_configProperties, newConfigProperties);
 

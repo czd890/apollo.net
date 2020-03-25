@@ -63,17 +63,15 @@ namespace Com.Ctrip.Framework.Apollo
             return builder.AddNamespace(@namespace, null, format);
         }
 
-        public static IApolloConfigurationBuilder AddNamespace(this IApolloConfigurationBuilder builder, string @namespace, string sectionKey, ConfigFileFormat format = ConfigFileFormat.Properties)
+
+        public static IApolloConfigurationBuilder AddNamespace(this IApolloConfigurationBuilder builder, string @namespace, string? sectionKey, ConfigFileFormat format = ConfigFileFormat.Properties)
         {
             if (string.IsNullOrWhiteSpace(@namespace))
             {
                 throw new ArgumentNullException(nameof(@namespace));
             }
 
-            if (format < ConfigFileFormat.Properties || format > ConfigFileFormat.Txt)
-            {
-                throw new ArgumentOutOfRangeException(nameof(format), format, $"minValue:{ConfigFileFormat.Properties}，maxValue:{ConfigFileFormat.Txt}");
-            }
+            if (format != ConfigFileFormat.Properties) @namespace += "." + format.GetString();
 
             if (format != ConfigFileFormat.Properties)
             {
@@ -81,9 +79,10 @@ namespace Com.Ctrip.Framework.Apollo
             }
 
             var configRepository = builder.ConfigRepositoryFactory.GetConfigRepository(@namespace);
-            var previous = builder.Sources.FirstOrDefault(source => source is ApolloConfigurationProvider apollo &&
-                                                        apollo.SectionKey == sectionKey &&
-                                                        apollo.ConfigRepository == configRepository);
+            var previous = builder.Sources.FirstOrDefault(source =>
+                source is ApolloConfigurationProvider apollo &&
+                apollo.SectionKey == sectionKey &&
+                apollo.ConfigRepository == configRepository);
             if (previous != null)
             {
                 builder.Sources.Remove(previous);

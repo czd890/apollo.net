@@ -3,6 +3,10 @@
   <PropertyGroup>
     <AssemblyName>Com.Ctrip.Framework.Apollo.Configuration</AssemblyName>
     <PackageReleaseNotes>
+      2.3.0:
+        1. Add ICacheFileProvider to support custom local cahce provider.
+      2.2.0:
+        1. Using C# 8, Add Nullable attriute.
       2.1.4:
         1. Add support calls to AddApollo()
       2.0.2:
@@ -23,7 +27,7 @@
     <PackageProjectUrl>$(RepositoryUrl)/$(AssemblyName)</PackageProjectUrl>
     <RootNamespace>Com.Ctrip.Framework.Apollo</RootNamespace>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <Version>2.1.5</Version>
+    <Version>2.3.0</Version>
     <PackageId>Xignite.Apollo.Configuration</PackageId>
     <Authors>Xignite.Apollo.Configuration</Authors>
     <Company>Xignite.Apollo.Configuration</Company>

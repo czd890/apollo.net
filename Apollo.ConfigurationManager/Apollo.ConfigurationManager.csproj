@@ -3,6 +3,11 @@
   <PropertyGroup>
     <AssemblyName>Com.Ctrip.Framework.Apollo.ConfigurationManager</AssemblyName>
     <PackageReleaseNotes>
+      2.3.0:
+        1. Add ICacheFileProvider to support custom local cahce provider.
+      2.2.0:
+        1. Using C# 8, Add Nullable attribute
+        2. Support netframework 4.0 
       2.0.5:
           1. If ApolloConfigurationManager initializing the exception，Each call throws a meaningful exceptions.
       2.0.4:
@@ -27,12 +32,14 @@
     <PackageProjectUrl>$(RepositoryUrl)/$(AssemblyName)</PackageProjectUrl>
     <PackageTags>$(PackageTags) ConfigurationBuilder ConfigurationManager</PackageTags>
     <RootNamespace>Com.Ctrip.Framework.Apollo</RootNamespace>
-    <TargetFrameworks>net471;net45;netstandard2.0</TargetFrameworks>
-    <Version>2.1.0</Version>
+    <TargetFrameworks>net471;net45;net40;netstandard2.0</TargetFrameworks>
+    <Version>2.3.0</Version>
     <PackageId>Xignite.Apollo.ConfigurationManager</PackageId>
     <Authors>Xignite.Apollo.ConfigurationManager</Authors>
     <Company>Xignite.Apollo.ConfigurationManager</Company>
     <Product>Xignite.Apollo.ConfigurationManager</Product>
+    <TargetFrameworks>net471;net45;net40;netstandard2.0</TargetFrameworks>
+    <Version>2.3.0</Version>
   </PropertyGroup>
 
   <ItemGroup>
