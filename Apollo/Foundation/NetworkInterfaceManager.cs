@@ -49,7 +49,7 @@ namespace Com.Ctrip.Framework.Apollo.Foundation
                 }
                 foreach (var ip in hostIps)
                 {
-                    if (IsInSubnet(ip.Address.ToString(), prefer))
+                    if (IsInSubnet(ip.Address.ToString(), prefer.Trim()))
                     {
                         return ip.Address.ToString();
                     }
