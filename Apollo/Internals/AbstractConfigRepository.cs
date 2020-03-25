@@ -15,7 +15,16 @@ namespace Com.Ctrip.Framework.Apollo.Internals
         private readonly List<IRepositoryChangeListener> _listeners = new List<IRepositoryChangeListener>();
         public string Namespace { get; }
 
-        protected AbstractConfigRepository(string @namespace) => Namespace = @namespace;
+        public ConfigFileFormat Format { get; }
+
+        protected AbstractConfigRepository(string @namespace)
+        {
+            this.Namespace = @namespace;
+        }
+        protected AbstractConfigRepository(string @namespace, ConfigFileFormat @format) : this(@namespace)
+        {
+            this.Format = @format;
+        }
 
         public abstract Properties GetConfig();
 

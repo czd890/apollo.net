@@ -3,11 +3,13 @@ using Com.Ctrip.Framework.Apollo.Internals;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace Com.Ctrip.Framework.Apollo
 {
+    [DebuggerDisplay("SectionKey={SectionKey}, Namespace={ConfigRepository.Namespace}, Format={ConfigRepository.Format}")]
     public class ApolloConfigurationProvider : ConfigurationProvider, IRepositoryChangeListener, IConfigurationSource
     {
         internal string? SectionKey { get; }

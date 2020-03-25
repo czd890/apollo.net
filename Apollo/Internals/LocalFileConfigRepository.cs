@@ -21,19 +21,23 @@ namespace Com.Ctrip.Framework.Apollo.Internals
         private readonly IApolloOptions _options;
         private readonly IConfigRepository? _upstream;
 
-        public ConfigFileFormat Format { get; } = ConfigFileFormat.Properties;
-
         public LocalFileConfigRepository(string @namespace,
             IApolloOptions configUtil,
-            IConfigRepository? upstream = null) : base(@namespace)
+            IConfigRepository? upstream = null) : base(@namespace, GetFormat(@namespace))
         {
             _upstream = upstream;
             _options = configUtil;
-
-            var ext = Path.GetExtension(@namespace);
-            if (ext != null && ext.Length > 1 && Enum.TryParse(ext.Substring(1), true, out ConfigFileFormat format)) Format = format;
-
             PrepareConfigCacheDir();
+        }
+
+        static ConfigFileFormat GetFormat(string @namespace)
+        {
+            var ext = Path.GetExtension(@namespace);
+            if (!(ext != null && ext.Length > 1 && Enum.TryParse<ConfigFileFormat>(ext.Substring(1), true, out var format)))
+            {
+                format = ConfigFileFormat.Properties;
+            }
+            return format;
         }
 
         public override async Task Initialize()
