@@ -30,15 +30,17 @@ namespace Com.Ctrip.Framework.Apollo
         string LocalIp { get; }
 
         string? MetaServer { get; }
+
+        string? Secret { get; }
 #if NET40
         ReadOnlyCollection<string>? ConfigServer { get; }
 #else
         IReadOnlyCollection<string>? ConfigServer { get; }
 #endif
-        /// <summary>ms</summary>
+        /// <summary>Load config timeout. ms</summary>
         int Timeout { get; }
 
-        /// <summary>ms</summary>
+        /// <summary>Refresh interval. ms</summary>
         int RefreshInterval { get; }
 
         string? LocalCacheDir { get; }

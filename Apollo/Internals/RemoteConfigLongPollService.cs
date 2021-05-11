@@ -21,7 +21,7 @@ namespace Com.Ctrip.Framework.Apollo.Internals
     public class RemoteConfigLongPollService : IDisposable
     {
         private static readonly Func<Action<LogLevel, string, Exception?>> Logger = () => LogManager.CreateLogger(typeof(RemoteConfigLongPollService));
-        private static readonly long InitNotificationId = -1;
+        private const long InitNotificationId = -1;
         private readonly ConfigServiceLocator _serviceLocator;
         private readonly HttpUtil _httpUtil;
         private readonly IApolloOptions _options;
@@ -55,7 +55,6 @@ namespace Com.Ctrip.Framework.Apollo.Internals
             if (_cts == null) StartLongPolling();
         }
 
-
         private void StartLongPolling()
         {
             if (Interlocked.CompareExchange(ref _cts, new CancellationTokenSource(), null) != null) return;
@@ -79,7 +78,7 @@ namespace Com.Ctrip.Framework.Apollo.Internals
             while (!cancellationToken.IsCancellationRequested)
             {
                 var sleepTime = 50; //default 50 ms
-                string? url = null;
+                Uri? url = null;
                 try
                 {
                     if (lastServiceDto == null)
@@ -205,7 +204,7 @@ namespace Com.Ctrip.Framework.Apollo.Internals
             }
         }
 
-        private string AssembleLongPollRefreshUrl(string uri, string appId, string cluster, string? dataCenter)
+        private Uri AssembleLongPollRefreshUrl(string uri, string appId, string cluster, string? dataCenter)
         {
             if (!uri.EndsWith("/", StringComparison.Ordinal)) uri += "/";
 
@@ -228,7 +227,7 @@ namespace Com.Ctrip.Framework.Apollo.Internals
 
             uriBuilder.Query = QueryUtils.Build(query);
 
-            return uriBuilder.ToString();
+            return uriBuilder.Uri;
         }
 
         private static readonly JsonSerializerSettings JsonSettings = new JsonSerializerSettings
@@ -236,15 +235,14 @@ namespace Com.Ctrip.Framework.Apollo.Internals
             NullValueHandling = NullValueHandling.Ignore,
             ContractResolver = new CamelCasePropertyNamesContractResolver()
         };
-        private string AssembleNotifications(IDictionary<string, long?> notificationsMap)
-        {
-            return JsonConvert.SerializeObject(notificationsMap
+
+        private static string AssembleNotifications(IDictionary<string, long?> notificationsMap) =>
+            JsonConvert.SerializeObject(notificationsMap
                 .Select(kvp => new ApolloConfigNotification
                 {
                     NamespaceName = kvp.Key,
                     NotificationId = kvp.Value.GetValueOrDefault(InitNotificationId)
                 }), JsonSettings);
-        }
 
         public void Dispose()
         {
