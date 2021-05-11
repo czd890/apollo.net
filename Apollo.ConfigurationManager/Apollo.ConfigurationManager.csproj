@@ -3,23 +3,29 @@
   <PropertyGroup>
     <AssemblyName>Com.Ctrip.Framework.Apollo.ConfigurationManager</AssemblyName>
     <PackageReleaseNotes>
-      2.3.0:
-        1. Add ICacheFileProvider to support custom local cahce provider.
-      2.2.0:
-        1. Using C# 8, Add Nullable attribute
-        2. Support netframework 4.0 
-      2.0.5:
-          1. If ApolloConfigurationManager initializing the exception，Each call throws a meaningful exceptions.
-      2.0.4:
-          1. AppSettingsSectionBuilder Default Force Update Property Configuration App Settings to implement dynamic updates of ConfigurationManager.AppSettings (others still do not support dynamic updates)
-      2.0.2:
-          1. ApolloConfigurationManager is marked Obsolete
-      2.0.1:
-          1. Filtering duplicate Namespace
-      2.0.0:
-          1. Adding namespace support in json, XML and other formats
-          2. Support for reading Apollo configuration values from environment variables
-          3. Add support for netcore style key. Priority is lower than the original key
+2.4.3: Add read the ApolloOptions from environment. 
+2.4.2: Fix the AppSettingsSectionBuilder loses keys with the value length of 0.
+2.4.1: Add reset ConfigurationManager.s_initState to force refhresh the options in ConfigurationManager.
+2.4.0: Add using token to access Apollo.1.6.0+.
+2.3.0:
+    1. Add ICacheFileProvider to support custom local cahce provider.
+    2. Add PreferLocalIpAddress to select local ips(Xignite).
+	3. Support multi call AddApollo()(Xignite).
+2.2.0:
+    1. Using C# 8, Add Nullable attribute
+    2. Support netframework 4.0 
+2.0.5:
+    1. If ApolloConfigurationManager initializing the exception，Each call throws a meaningful exceptions.
+2.0.4:
+    1. AppSettingsSectionBuilder Default Force Update Property Configuration App Settings to implement dynamic updates of ConfigurationManager.AppSettings (others still do not support dynamic updates)
+2.0.2:
+    1. ApolloConfigurationManager is marked Obsolete
+2.0.1:
+    1. Filtering duplicate Namespace
+2.0.0:
+    1. Adding namespace support in json, XML and other formats
+    2. Support for reading Apollo configuration values from environment variables
+    3. Add support for netcore style key. Priority is lower than the original key
     </PackageReleaseNotes>
     <Description>
       Xignite Apollo Client SDK
@@ -29,7 +35,7 @@
       $(PackageReleaseNotes)
     </Description>
     <PackageIconUrl>https://raw.githubusercontent.com/ctripcorp/apollo/master/apollo-portal/src/main/resources/static/img/config.png</PackageIconUrl>
-    <PackageProjectUrl>$(RepositoryUrl)/$(AssemblyName)</PackageProjectUrl>
+    <PackageProjectUrl>$(RepositoryUrl)/$(MSBuildProjectName)</PackageProjectUrl>
     <PackageTags>$(PackageTags) ConfigurationBuilder ConfigurationManager</PackageTags>
     <RootNamespace>Com.Ctrip.Framework.Apollo</RootNamespace>
     <PackageId>Xignite.Apollo.ConfigurationManager</PackageId>
@@ -37,7 +43,7 @@
     <Company>Xignite.Apollo.ConfigurationManager</Company>
     <Product>Xignite.Apollo.ConfigurationManager</Product>
     <TargetFrameworks>net471;net45;net40;netstandard2.0</TargetFrameworks>
-    <Version>2.3.0</Version>
+    <Version>2.4.3</Version>
   </PropertyGroup>
 
   <ItemGroup>

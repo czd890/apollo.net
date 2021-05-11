@@ -33,6 +33,10 @@ namespace Microsoft.Extensions.Configuration
 #pragma warning restore 618
             var apolloBuilder = new ApolloConfigurationBuilder(builder, repositoryFactory);
             builder.Properties[typeof(ApolloConfigurationExtensions).FullName] = apolloBuilder;
+
+            if (options is ApolloOptions ao && ao.Namespaces != null)
+                foreach (var ns in ao.Namespaces) apolloBuilder.AddNamespace(ns);
+
             return apolloBuilder;
         }
 

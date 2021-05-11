@@ -1,32 +1,22 @@
-﻿using Com.Ctrip.Framework.Apollo;
-using Com.Ctrip.Framework.Apollo.ConfigAdapter;
-using Com.Ctrip.Framework.Apollo.Enums;
-using Microsoft.AspNetCore;
+﻿using Com.Ctrip.Framework.Apollo.ConfigAdapter;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Hosting;
+using System.Threading.Tasks;
 
 namespace Apollo.AspNetCore.Demo
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public static Task Main(string[] args)
         {
             YamlConfigAdapter.Register();
 
-            CreateWebHostBuilder(args).Build().Run();
+            return CreateHostBuilder(args).Build().RunAsync();
         }
 
-        public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
-            WebHost.CreateDefaultBuilder(args)
-               //.ConfigureAppConfiguration((context, builder) => builder //Using environment variables, command lines, etc., it is recommended that Docker run in this way
-               //     .AddApollo(context.Configuration.GetSection("apollo"))
-               .ConfigureAppConfiguration(builder => builder //Ordinary, generally configured in appsettings. JSON
-                   .AddApollo(builder.Build().GetSection("apollo"))
-                    .AddDefault(ConfigFileFormat.Xml)
-                    .AddDefault(ConfigFileFormat.Json)
-                    .AddDefault(ConfigFileFormat.Yml)
-                    .AddDefault(ConfigFileFormat.Yaml)
-                    .AddDefault())
-                .UseStartup<Startup>();
+        public static IHostBuilder CreateHostBuilder(string[] args) =>
+            Host.CreateDefaultBuilder(args)
+                .AddApollo(false)
+                .ConfigureWebHostDefaults(builder => builder.UseStartup<Startup>());
     }
 }

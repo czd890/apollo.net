@@ -1,6 +1,8 @@
 ﻿using Com.Ctrip.Framework.Apollo.Core.Utils;
 using Com.Ctrip.Framework.Apollo.Internals;
+
 using Microsoft.Extensions.Configuration;
+
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -10,7 +12,7 @@ using System.Threading.Tasks;
 namespace Com.Ctrip.Framework.Apollo
 {
     [DebuggerDisplay("SectionKey={SectionKey}, Namespace={ConfigRepository.Namespace}, Format={ConfigRepository.Format}")]
-    public class ApolloConfigurationProvider : ConfigurationProvider, IRepositoryChangeListener, IConfigurationSource
+    public class ApolloConfigurationProvider : ConfigurationProvider, IRepositoryChangeListener, IConfigurationSource, IDisposable
     {
         internal string? SectionKey { get; }
         internal IConfigRepository ConfigRepository { get; }
@@ -54,5 +56,7 @@ namespace Com.Ctrip.Framework.Apollo
         }
 
         IConfigurationProvider IConfigurationSource.Build(IConfigurationBuilder builder) => this;
+
+        public void Dispose() => ConfigRepository.RemoveChangeListener(this);
     }
 }

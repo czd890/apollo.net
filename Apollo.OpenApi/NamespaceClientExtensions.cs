@@ -3,31 +3,29 @@ using System;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
+#if NET40
+using WebUtility = System.Web.HttpUtility;
+#endif
 
 namespace Com.Ctrip.Framework.Apollo.OpenApi
 {
     public static class NamespaceClientExtensions
     {
-        
-        public static Task<Namespace?> GetNamespaceInfo( this INamespaceClient client,
+        public static Task<Namespace?> GetNamespaceInfo(this INamespaceClient client,
             CancellationToken cancellationToken = default)
         {
             if (client == null) throw new ArgumentNullException(nameof(client));
 
             return client.Get<Namespace>($"envs/{client.Env}/apps/{client.AppId}/clusters/{client.Cluster}/namespaces/{client.Namespace}", cancellationToken);
         }
-
-        
-        public static Task<NamespaceLock?> GetNamespaceLock( this INamespaceClient client,
+        public static Task<NamespaceLock?> GetNamespaceLock(this INamespaceClient client,
             CancellationToken cancellationToken = default)
         {
             if (client == null) throw new ArgumentNullException(nameof(client));
 
             return client.Get<NamespaceLock>($"envs/{client.Env}/apps/{client.AppId}/clusters/{client.Cluster}/namespaces/{client.Namespace}/lock", cancellationToken);
         }
-
-        
-        public static Task<Item?> GetItem( this INamespaceClient client,
+        public static Task<Item?> GetItem(this INamespaceClient client,
              string key, CancellationToken cancellationToken = default)
         {
             if (client == null) throw new ArgumentNullException(nameof(client));
@@ -36,8 +34,7 @@ namespace Com.Ctrip.Framework.Apollo.OpenApi
             return client.Get<Item>($"envs/{client.Env}/apps/{client.AppId}/clusters/{client.Cluster}/namespaces/{client.Namespace}/items/{key}", cancellationToken);
         }
 
-        
-        public static Task<Item> CreateItem( this INamespaceClient client,
+        public static Task<Item> CreateItem(this INamespaceClient client,
              Item item, CancellationToken cancellationToken = default)
         {
             if (client == null) throw new ArgumentNullException(nameof(client));
@@ -48,8 +45,7 @@ namespace Com.Ctrip.Framework.Apollo.OpenApi
             return client.Post<Item>($"envs/{client.Env}/apps/{client.AppId}/clusters/{client.Cluster}/namespaces/{client.Namespace}/items", item, cancellationToken);
         }
 
-        
-        public static Task UpdateItem( this INamespaceClient client,
+        public static Task UpdateItem(this INamespaceClient client,
              Item item, CancellationToken cancellationToken = default)
         {
             if (client == null) throw new ArgumentNullException(nameof(client));
@@ -60,8 +56,7 @@ namespace Com.Ctrip.Framework.Apollo.OpenApi
             return client.Put<Item>($"envs/{client.Env}/apps/{client.AppId}/clusters/{client.Cluster}/namespaces/{client.Namespace}/items/{item.Key}", item, cancellationToken);
         }
 
-        
-        public static Task<Item> CreateOrUpdateItem( this INamespaceClient client,
+        public static Task<Item> CreateOrUpdateItem(this INamespaceClient client,
              Item item, CancellationToken cancellationToken = default)
         {
             if (client == null) throw new ArgumentNullException(nameof(client));
@@ -75,7 +70,7 @@ namespace Com.Ctrip.Framework.Apollo.OpenApi
             return client.Put<Item>($"envs/{client.Env}/apps/{client.AppId}/clusters/{client.Cluster}/namespaces/{client.Namespace}/items/{item.Key}?createIfNotExists=true", item, cancellationToken);
         }
 
-        public static Task<bool> RemoveItem( this INamespaceClient client,  string key,
+        public static Task<bool> RemoveItem(this INamespaceClient client, string key,
              string @operator, CancellationToken cancellationToken = default)
         {
             if (client == null) throw new ArgumentNullException(nameof(client));
@@ -85,8 +80,7 @@ namespace Com.Ctrip.Framework.Apollo.OpenApi
             return client.Delete($"envs/{client.Env}/apps/{client.AppId}/clusters/{client.Cluster}/namespaces/{client.Namespace}/items/{key}?operator={WebUtility.UrlEncode(@operator)}", cancellationToken);
         }
 
-        
-        public static Task<Release> Publish( this INamespaceClient client,
+        public static Task<Release> Publish(this INamespaceClient client,
              NamespaceRelease release, CancellationToken cancellationToken = default)
         {
             if (client == null) throw new ArgumentNullException(nameof(client));
@@ -97,13 +91,20 @@ namespace Com.Ctrip.Framework.Apollo.OpenApi
             return client.Post<Release>($"envs/{client.Env}/apps/{client.AppId}/clusters/{client.Cluster}/namespaces/{client.Namespace}/releases", release, cancellationToken);
         }
 
-        
-        public static Task<Release?> GetLatestActiveRelease( this INamespaceClient client,
+        public static Task<Release?> GetLatestActiveRelease(this INamespaceClient client,
             CancellationToken cancellationToken = default)
         {
             if (client == null) throw new ArgumentNullException(nameof(client));
 
             return client.Get<Release>($"envs/{client.Env}/apps/{client.AppId}/clusters/{client.Cluster}/namespaces/{client.Namespace}/releases/latest", cancellationToken);
+        }
+
+        public static Task<bool> Rollback(this INamespaceClient client, string @operator, int releaseId,
+            CancellationToken cancellationToken = default)
+        {
+            if (client == null) throw new ArgumentNullException(nameof(client));
+
+            return client.Put($"envs/{client.Env}/releases/{releaseId}/rollback?operator={WebUtility.UrlEncode(@operator)}", cancellationToken);
         }
     }
 }

@@ -5,9 +5,9 @@
     <PackageReleaseNotes></PackageReleaseNotes>   
     <Description>Xignite Apollo OpenApi Client SDK，Please using services.AddApolloOpenApi() and .GetService&lt;IOpenApiFactory&gt;</Description>
     <PackageIconUrl>https://raw.githubusercontent.com/ctripcorp/apollo/master/apollo-portal/src/main/resources/static/img/config.png</PackageIconUrl>
-    <PackageProjectUrl>$(RepositoryUrl)/$(AssemblyName)</PackageProjectUrl>
+    <PackageProjectUrl>$(RepositoryUrl)/$(MSBuildProjectName)</PackageProjectUrl>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <Version>2.0.0</Version>
+    <Version>2.1.0</Version>
     <RootNamespace>Com.Ctrip.Framework.Apollo.OpenApi</RootNamespace>
     <PackageId>Xignite.Apollo.OpenApi.DependencyInjection</PackageId>
   </PropertyGroup>

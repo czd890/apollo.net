@@ -1,5 +1,7 @@
 ﻿# 一、准备工作
 
+> 如果想将传统的config配置（如web.config）转成json配置，可以使用[config2json](https://github.com/andrewlock/dotnet-config2json)工具
+
 ## 1.1 环境要求
 
 * [NETStandard 2.0](https://github.com/dotnet/standard/blob/master/docs/versions/netstandard2.0.md#platform-support)
@@ -109,9 +111,6 @@ Apollo支持配置按照集群划分，也就是说对于一个appId和一个环
 }
 ```
 
-* 例如，下面的截图配置指定了运行时的集群为SomeCluster
-* ![apollo-net-apollo-cluster](https://raw.githubusercontent.com/ctripcorp/apollo/master/doc/images/apollo-net-apollo-cluster.png)
-
 **Cluster Precedence**（集群顺序）
 
 1. 如果`Cluster`和`DataCenter`同时指定：
@@ -132,7 +131,7 @@ Apollo支持配置按照集群划分，也就是说对于一个appId和一个环
 
 ## 1.3 使用非Properies格式的namespace
 
-内部使用namespace的后缀来判断namespace类型，比如application.json时，会使用json格式来解析数据，内部默认实现了json和xml两种格式，可覆盖，其他格式需要自行实现。
+内部使用namespace的后缀来判断namespace类型，比如application.json时，会使用json格式来解析数据，内部默认实现了json和xml两种格式，可覆盖，yml和yaml可使用Apollo.ConfigAdapter.Yaml包，其他格式需要自行实现。
 
 1. 实现IConfigAdapter或者继承ContentConfigAdapter
 2. 使用`ConfigAdapterRegister.AddAdapter`注册实现的类的实例（Properties不能被覆盖）
@@ -144,6 +143,18 @@ Apollo支持配置按照集群划分，也就是说对于一个appId和一个环
 
 # 三、客户端用法
 
+> 参考配置
+``` json
+{
+  "apollo": {
+    "AppId": "apollo-client",
+    "MetaServer": "http://localhost:8080/",
+    "Namespaces": [ "some namespace", "application.json", "application" ]
+  }
+}
+
+```
+
 ## 3.1 修改Program.cs文件
 
 ### 3.1.1 配置在appsettings.json中
@@ -151,9 +162,7 @@ Apollo支持配置按照集群划分，也就是说对于一个appId和一个环
 ``` diff
     WebHost.CreateDefaultBuilder(args)
 +       .ConfigureAppConfiguration(builder => builder
-+           .AddApollo(builder.Build().GetSection("apollo"))
-+           .AddNamespace("Some namespace")
-+           .AddDefault())
++           .AddApollo(builder.Build().GetSection("apollo")))
         .UseStartup<Startup>()
 ```
 
@@ -162,9 +171,7 @@ Apollo支持配置按照集群划分，也就是说对于一个appId和一个环
 ``` diff
     WebHost.CreateDefaultBuilder(args)
 +       .ConfigureAppConfiguration((cotnext, builder) => builder
-+           .AddApollo(cotnext.Configuration.GetSection("apollo"))
-+           .AddNamespace("Some namespace")
-+           .AddDefault())
++           .AddApollo(cotnext.Configuration.GetSection("apollo")))
         .UseStartup<Startup>()
 ```
 
@@ -227,3 +234,13 @@ services.ConfigureJsonValue<Options>(/*name, */config.GetSection("somePrefix:Jso
     }
 }
 ```
+
+## 4.4 如何使用访问密钥
+
+> 配置对应的环境的Secret即可
+``` diff
+{
+    "apollo": {
+        "Secret": "服务端配置的值"
+    }
+}

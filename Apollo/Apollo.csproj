@@ -2,26 +2,32 @@
 
   <PropertyGroup>
     <AssemblyName>Com.Ctrip.Framework.Apollo</AssemblyName>
-    <PackageReleaseNotes>
-      2.1.0:
-      1. Fix ConfigServiceLocator can not refresh bug.
-      2.0.5:
-      1. If LogManager.CreateLogger has exceptions, returned result.
-      2.0.4:
-      1. Fix ConfigChanged event args is Incorrect of MultiConfig.
-      2. If namespace data is error, Report make sense tips.
-      2.0.3:
-      1. Fix deadlock in ConfigurationBuilder on net471
-      2. Fix when not exists localcache and load remote is exception then throw null ref exceptions.
-      2.0.2:
-      1. Fix published, is not Properties namespace can not load settings.
-      2. Fix IConfig event can not tigger bug.
-      2.0.1:
-      1. Fix an NullReferenceException on Concurrent.
-      2.0.0:
-      1. Add json,xml support.
-      2. Redesign IConfig
-      3. Refactoring log
+    <PackageReleaseNotes>2.4.4: Update the timeount from hard code 2000ms to ApolloOptions.Timeout in ConfigServices.
+2.4.3: Fix the MultiConfig loses keys with the value length of 0.
+2.4.2: Add MetaServer support the used comma to split multi uri.
+2.4.1: Fix used too many tcp sockets for multi namespaces.
+2.4.0: Add using token to access Apollo.1.6.0+.
+2.3.0: 
+    1. Add ICacheFileProvider to support the custom lcoal storage(e.g encrypted in local storage)
+	2. Add PreferLocalIpAddress to select local ips(Xignite).
+	3. Support multi call AddApollo()(Xignite).
+2.2.0: Fix can not sync in ConfigService shutdown and released new options.
+2.1.0:Fix ConfigServiceLocator can not refresh bug.
+2.0.5: If LogManager.CreateLogger has exceptions, returned result.
+2.0.4:
+    1. Fix ConfigChanged event args is Incorrect of MultiConfig.
+    2. If namespace data is error, Report make sense tips.
+2.0.3:
+    1. Fix deadlock in ConfigurationBuilder on net471
+    2. Fix when not exists localcache and load remote is exception then throw null ref exceptions.
+2.0.2:
+    1. Fix published, is not Properties namespace can not load settings.
+    2. Fix IConfig event can not tigger bug.
+2.0.1: Fix an NullReferenceException on Concurrent.
+2.0.0:
+    1. Add json,xml support.
+    2. Redesign IConfig
+    3. Refactoring log
     </PackageReleaseNotes>
     <Description>
       Xignite Apollo Client SDK
@@ -31,10 +37,10 @@
       $(PackageReleaseNotes)
     </Description>
     <PackageIconUrl>https://raw.githubusercontent.com/ctripcorp/apollo/master/apollo-portal/src/main/resources/static/img/config.png</PackageIconUrl>
-    <PackageProjectUrl>$(RepositoryUrl)/$(AssemblyName)</PackageProjectUrl>
+    <PackageProjectUrl>$(RepositoryUrl)/$(MSBuildProjectName)</PackageProjectUrl>
     <RootNamespace>Com.Ctrip.Framework.Apollo</RootNamespace>
     <TargetFrameworks>net40;net45;netstandard2.0</TargetFrameworks>
-    <Version>2.3.1</Version>
+    <Version>2.4.4</Version>
     <PackageId>Xignite.Apollo</PackageId>
     <Authors>Xignite.Apollo</Authors>
     <Company>Xignite.Apollo</Company>
@@ -76,20 +82,14 @@
     <Compile Update="Resources.Designer.cs">
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <PackageReference Include="Newtonsoft.Json" Version="11.*" Condition="'$(TargetFrameworkIdentifier)' != '.NETFramework'" />
-  </ItemGroup>
 
-  <ItemGroup Condition="'$(TargetFramework)' == 'net45'">
-    <PackageReference Include="Newtonsoft.Json" Version="6.*" />
-
-    <Reference Include="System.Net.Http" />
+    <PackageReference Include="Microsoft.AspNet.WebApi.Client" Version="5.*" Condition="'$(TargetFramework)' != 'net40'" />
     <Reference Include="System.Web" />
   </ItemGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' == 'net40'">
     <PackageReference Include="Microsoft.Bcl.Async" Version="1.*" />
-    <PackageReference Include="Microsoft.Net.Http" Version="2.*" />
-    <PackageReference Include="Newtonsoft.Json" Version="6.*" />
+    <PackageReference Include="Microsoft.AspNet.WebApi.Client" Version="4.*" />
 
     <Reference Include="System.Web" />
   </ItemGroup>

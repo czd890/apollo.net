@@ -24,10 +24,7 @@ namespace Com.Ctrip.Framework.Apollo
             get => _appId;
             set
             {
-                if (LocalCacheDir == null)
-                {
-                    LocalCacheDir = Path.Combine(ConfigConsts.DefaultLocalCacheDir, value);
-                }
+                LocalCacheDir ??= Path.Combine(ConfigConsts.DefaultLocalCacheDir, value);
 
                 _appId = value;
             }
@@ -56,6 +53,8 @@ namespace Com.Ctrip.Framework.Apollo
         /// </summary>
         /// <returns> the cluster name, or "default" if not specified </returns>
         public virtual string Cluster { get => _cluster ?? ConfigConsts.ClusterNameDefault; set => _cluster = value; }
+
+        public IEnumerable<string>? Namespaces { get; set; }
 
         /// <summary>Default Dev</summary>
         public virtual Env Env { get; set; } = Env.Dev;
@@ -94,6 +93,8 @@ namespace Com.Ctrip.Framework.Apollo
             }
             set => _metaServer = ConfigConsts.DefaultMetaServerUrl == value ? null : value;
         }
+
+        public string? Secret { get; set; }
 
         public IReadOnlyCollection<string>? ConfigServer { get; set; }
 

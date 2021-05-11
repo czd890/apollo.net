@@ -5,17 +5,24 @@
     <PackageReleaseNotes></PackageReleaseNotes>
     <Description>Xignite Apollo OpenApi Client SDK，Please using services.AddApolloOpenApi() and .GetService&lt;IOpenApiFactory&gt;</Description>
     <PackageIconUrl>https://raw.githubusercontent.com/ctripcorp/apollo/master/apollo-portal/src/main/resources/static/img/config.png</PackageIconUrl>
-    <PackageProjectUrl>$(RepositoryUrl)/$(AssemblyName)</PackageProjectUrl>
-    <TargetFrameworks>net45;netstandard2.0</TargetFrameworks>
-    <Version>2.0.0</Version>
+    <PackageProjectUrl>$(RepositoryUrl)/$(MSBuildProjectName)</PackageProjectUrl>
+    <TargetFrameworks>net40;net45;netstandard2.0</TargetFrameworks>
+    <Version>2.1.0</Version>
     <RootNamespace>Com.Ctrip.Framework.Apollo.OpenApi</RootNamespace>
     <PackageId>Xignite.Apollo.OpenApi</PackageId>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNet.WebApi.Client" Version="5.2.7" />
-
     <ProjectReference Include="..\Apollo\Apollo.csproj" PrivateAssets="All" />
+
+    <PackageReference Include="Microsoft.AspNet.WebApi.Client" Version="5.*" Condition="'$(TargetFramework)' != 'net40'" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)' == 'net40'">
+    <PackageReference Include="Microsoft.Bcl.Async" Version="1.*" />
+    <PackageReference Include="Microsoft.AspNet.WebApi.Client" Version="4.*" />
+
+    <Reference Include="System.Web" />
   </ItemGroup>
 
 </Project>
