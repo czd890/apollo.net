@@ -36,11 +36,7 @@
     <PackageProjectUrl>$(RepositoryUrl)/$(MSBuildProjectName)</PackageProjectUrl>
     <RootNamespace>Com.Ctrip.Framework.Apollo</RootNamespace>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <Version>2.3.1</Version>
     <PackageId>Xignite.Apollo.Configuration</PackageId>
-    <Authors>Xignite.Apollo.Configuration</Authors>
-    <Company>Xignite.Apollo.Configuration</Company>
-    <Product>Xignite.Apollo.Configuration</Product>
   </PropertyGroup>
 
   <ItemGroup>

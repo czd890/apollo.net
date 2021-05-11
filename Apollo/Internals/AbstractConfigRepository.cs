@@ -1,5 +1,6 @@
 ﻿using Com.Ctrip.Framework.Apollo.Core.Utils;
 using Com.Ctrip.Framework.Apollo.Logging;
+
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -13,13 +14,13 @@ namespace Com.Ctrip.Framework.Apollo.Internals
         private readonly List<IRepositoryChangeListener> _listeners = new List<IRepositoryChangeListener>();
         public string Namespace { get; }
 
-        public ConfigFileFormat Format { get; }
+        public Com.Ctrip.Framework.Apollo.Enums.ConfigFileFormat Format { get; }
 
         protected AbstractConfigRepository(string @namespace)
         {
             this.Namespace = @namespace;
         }
-        protected AbstractConfigRepository(string @namespace, ConfigFileFormat @format) : this(@namespace)
+        protected AbstractConfigRepository(string @namespace, Com.Ctrip.Framework.Apollo.Enums.ConfigFileFormat @format) : this(@namespace)
         {
             this.Format = @format;
         }

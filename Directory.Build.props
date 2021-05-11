@@ -3,6 +3,7 @@
   <PropertyGroup>
     <AssemblyOriginatorKeyFile>..\Apollo.snk</AssemblyOriginatorKeyFile>
     <AssemblyVersion>2.0.0</AssemblyVersion>
+    <Version>2.4.4</Version>
     <DebugSymbols>True</DebugSymbols>
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
     <GeneratePackageOnBuild Condition="'$(Configuration)' == 'Release'">True</GeneratePackageOnBuild>
@@ -14,6 +15,9 @@
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl Condition="'$(TargetFramework)' != 'net40'">https://github.com/ctripcorp/apollo.net/tree/dotnet-core</RepositoryUrl>
     <SignAssembly>true</SignAssembly>
+    <Authors>Xignite.Apollo</Authors>
+    <Company>Xignite.Apollo</Company>
+    <Product>Xignite.Apollo</Product>
   </PropertyGroup>
 
   <ItemGroup>
