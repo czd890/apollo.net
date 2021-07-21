@@ -1,6 +1,7 @@
 ﻿using Com.Ctrip.Framework.Apollo.Core;
 using Com.Ctrip.Framework.Apollo.Enums;
 using Com.Ctrip.Framework.Apollo.Foundation;
+
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -66,11 +67,11 @@ namespace Com.Ctrip.Framework.Apollo
             {
                 if (_localIp == null)
                 {
-                    return NetworkInterfaceManager.GetHostIp(this.PreferLocalIpAddress);
+                    return _localIp = NetworkInterfaceManager.GetHostIp(this.PreferLocalIpAddress);
                 }
                 return _localIp;
             }
-            set => _localIp = value == NetworkInterfaceManager.HostIp ? null : value;
+            set => _localIp = value;
         }
 
         /// <summary>Default http://localhost:8080</summary>
