@@ -18,24 +18,24 @@ public class LocalFileConfigRepository : AbstractConfigRepository, IRepositoryCh
     private readonly IApolloOptions _options;
     private readonly IConfigRepository? _upstream;
 
-        public LocalFileConfigRepository(string @namespace,
-            IApolloOptions configUtil,
-            IConfigRepository? upstream = null) : base(@namespace, GetFormat(@namespace))
-        {
-            _upstream = upstream;
-            _options = configUtil;
-            PrepareConfigCacheDir();
-        }
+    public LocalFileConfigRepository(string @namespace,
+        IApolloOptions configUtil,
+        IConfigRepository? upstream = null) : base(@namespace, GetFormat(@namespace))
+    {
+        _upstream = upstream;
+        _options = configUtil;
+        PrepareConfigCacheDir();
+    }
 
-        static ConfigFileFormat GetFormat(string @namespace)
+    static ConfigFileFormat GetFormat(string @namespace)
+    {
+        var ext = Path.GetExtension(@namespace);
+        if (!(ext != null && ext.Length > 1 && Enum.TryParse<ConfigFileFormat>(ext.Substring(1), true, out var format)))
         {
-            var ext = Path.GetExtension(@namespace);
-            if (!(ext != null && ext.Length > 1 && Enum.TryParse<ConfigFileFormat>(ext.Substring(1), true, out var format)))
-            {
-                format = ConfigFileFormat.Properties;
-            }
-            return format;
+            format = ConfigFileFormat.Properties;
         }
+        return format;
+    }
 
     public override async Task Initialize()
     {
@@ -89,8 +89,8 @@ public class LocalFileConfigRepository : AbstractConfigRepository, IRepositoryCh
             _upstream?.Dispose();
         }
 
-            _disposed = true;
-        }
+        _disposed = true;
+    }
 
     private bool TrySyncFromUpstream()
     {
@@ -107,7 +107,7 @@ public class LocalFileConfigRepository : AbstractConfigRepository, IRepositoryCh
         catch (Exception ex)
         {
             Logger().Warn(
-                $"Sync config from upstream repository {_upstream.GetType()} failed, reason: {ex.GetDetailMessage()}");
+                $"Sync config from upstream repository {_upstream.GetType()} failed, reason: {ex.GetDetailMessage()}", ex);
         }
 
         return false;

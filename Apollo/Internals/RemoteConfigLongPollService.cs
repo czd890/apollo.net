@@ -6,6 +6,7 @@ using Com.Ctrip.Framework.Apollo.Exceptions;
 using Com.Ctrip.Framework.Apollo.Logging;
 using Com.Ctrip.Framework.Apollo.Util;
 using Com.Ctrip.Framework.Apollo.Util.Http;
+
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 
@@ -59,7 +60,7 @@ public class RemoteConfigLongPollService : IDisposable
         catch (Exception ex)
         {
             var exception = new ApolloConfigException("Schedule long polling refresh failed", ex);
-            Logger().Warn(exception.GetDetailMessage());
+            Logger().Warn(exception.GetDetailMessage(), ex);
         }
     }
 
@@ -114,7 +115,7 @@ public class RemoteConfigLongPollService : IDisposable
                 lastServiceDto = null;
 
                 var sleepTimeInSecond = _longPollFailSchedulePolicyInSecond.Fail();
-                Logger().Warn($"Long polling failed, will retry in {sleepTimeInSecond} seconds. appId: {appId}, cluster: {cluster}, namespace: {string.Join(ConfigConsts.ClusterNamespaceSeparator, _longPollNamespaces.Keys)}, long polling url: {url}, reason: {ex.GetDetailMessage()}");
+                Logger().Warn($"Long polling failed, will retry in {sleepTimeInSecond} seconds. appId: {appId}, cluster: {cluster}, namespace: {string.Join(ConfigConsts.ClusterNamespaceSeparator, _longPollNamespaces.Keys)}, long polling url: {url}, reason: {ex.GetDetailMessage()}", ex);
 
                 sleepTime = sleepTimeInSecond * 1000;
             }

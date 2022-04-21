@@ -2,29 +2,6 @@
 
   <PropertyGroup>
     <AssemblyName>Com.Ctrip.Framework.Apollo.Configuration</AssemblyName>
-    <PackageReleaseNotes>2.4.4: Update the timeount from hard code 2000ms to ApolloOptions.Timeout in ConfigServices.
-2.4.3: Fix the MultiConfig loses keys with the value length of 0.
-2.4.2: Add MetaServer support the used comma to split multi uri.
-2.4.1: 
-    1. Fix used too many tcp sockets for multi namespaces.
-	2. Add read namespcaes from config options.
-2.4.0: Add using token to access Apollo.1.6.0+.
-2.3.0: 
-1. Add ICacheFileProvider to support the custom lcoal storage(e.g encrypted in local storage)
-2. Add PreferLocalIpAddress to select local ips(Xignite).
-3. Support multi call AddApollo()(Xignite).
-2.2.0:
-  1. Using C# 8, Add Nullable attriute.
-2.1.4:
-  1. Add support calls to AddApollo()
-2.0.2:
-  1. Refactoring get Properties settings.
-2.0.1:
-  1. Filter duplicate Namespace (whichever is added later)
-2.0.0:
-  1. Support for specifying format when adding namespace
-  2. Support reading MetaServer through Env
-    </PackageReleaseNotes>
     <Description>
       Xignite Apollo Client SDK
       　To integrate with Microsoft.Extensions.Configuration, use the Xignite.Apollo.Configuration package.

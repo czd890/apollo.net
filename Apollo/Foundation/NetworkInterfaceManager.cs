@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Com.Ctrip.Framework.Apollo.Logging;
+
+using System;
 using System.Linq;
 using System.Net;
 using System.Net.NetworkInformation;
@@ -41,19 +43,26 @@ namespace Com.Ctrip.Framework.Apollo.Foundation
                 return HostIp;
             }
 
-            foreach (var prefer in preferLocalIpAddress!.Split(','))
+            try
             {
-                if (string.IsNullOrEmpty(prefer))
+                foreach (var prefer in preferLocalIpAddress!.Split(','))
                 {
-                    continue;
-                }
-                foreach (var ip in hostIps)
-                {
-                    if (IsInSubnet(ip.Address.ToString(), prefer.Trim()))
+                    if (string.IsNullOrEmpty(prefer))
                     {
-                        return ip.Address.ToString();
+                        continue;
+                    }
+                    foreach (var ip in hostIps)
+                    {
+                        if (IsInSubnet(ip.Address.ToString(), prefer.Trim()))
+                        {
+                            return ip.Address.ToString();
+                        }
                     }
                 }
+            }
+            catch (Exception ex)
+            {
+                LogManager.CreateLogger(typeof(NetworkInterfaceManager)).Error($"Can not get local ip address with prefer options '{preferLocalIpAddress}'.", ex);
             }
             return HostIp;
         }

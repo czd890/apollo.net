@@ -4,7 +4,7 @@
     <ApolloVersion>2.6</ApolloVersion>
     <AssemblyOriginatorKeyFile>..\Apollo.snk</AssemblyOriginatorKeyFile>
     <AssemblyVersion>2.0.0</AssemblyVersion>
-    <Version>2.4.4</Version>
+    <Version>2.6.0</Version>
     <DebugSymbols>True</DebugSymbols>
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
     <GeneratePackageOnBuild Condition="'$(Configuration)' == 'Release'">True</GeneratePackageOnBuild>
@@ -15,13 +15,43 @@
     <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
     <NoWarn>$(NoWarn);CS0414;CS0436;CS1591</NoWarn>
     <PackageIcon>icon.png</PackageIcon>
-    <PackageTags>apollo configcenter configuration ctrip</PackageTags><PackageIcon>icon.png</PackageIcon>
+    <PackageTags>apollo configcenter configuration ctrip</PackageTags>
+    <PackageIcon>icon.png</PackageIcon>
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>https://github.com/apolloconfig/apollo.net/tree/main</RepositoryUrl>
     <SignAssembly>true</SignAssembly>
     <Authors>Xignite.Apollo</Authors>
     <Company>Xignite.Apollo</Company>
     <Product>Xignite.Apollo</Product>
+    <PackageReleaseNotes>
+      <![CDATA[
+2.6.2: (Include 2.5.x)
+    1. Add ConfigurationBuilder feature. https://github.com/pengweiqhca/Microsoft.Extensions.Configuration.Placeholder
+    2. Add PlaceHolder feature. https://github.com/pengweiqhca/Microsoft.Extensions.Configuration.Placeholder
+    3. Can configure an HttpMessageHandler for internal http request.
+    4. Add logger to Microsoft.Extensions.Logging, please call MelLogging.UseMel().
+    5. Add exception object to logger when the logger happend in try-catch(Xignite).
+    6. Fix an array index outside bug on configured wrong PreferLocalIpAddress(Xignite).
+2.4.4: Update the timeount from hard code 2000ms to ApolloOptions.Timeout in ConfigServices.
+2.4.3: Fix the MultiConfig loses keys with the value length of 0.
+2.4.2: Add MetaServer support the used comma to split multi uri.
+2.4.1: 
+    1. Fix used too many tcp sockets for multi namespaces.
+	2. Add read namespcaes from config options.
+2.4.0: Add using token to access Apollo.1.6.0+.
+2.3.0: 
+    1. Add ICacheFileProvider to support the custom lcoal storage(e.g encrypted in local storage)
+    2. Add PreferLocalIpAddress to select local ips(Xignite).
+    3. Support multi call AddApollo()(Xignite).
+2.2.0: Using C# 8, Add Nullable attriute.
+2.1.4: Add support calls to AddApollo()
+2.0.2: Refactoring get Properties settings.
+2.0.1: Filter duplicate Namespace (whichever is added later)
+2.0.0:
+    1. Support for specifying format when adding namespace
+    2. Support reading MetaServer through Env
+]]>
+    </PackageReleaseNotes>
   </PropertyGroup>
 
   <ItemGroup>

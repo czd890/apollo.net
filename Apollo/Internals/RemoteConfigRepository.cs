@@ -4,8 +4,10 @@ using Com.Ctrip.Framework.Apollo.Exceptions;
 using Com.Ctrip.Framework.Apollo.Logging;
 using Com.Ctrip.Framework.Apollo.Util;
 using Com.Ctrip.Framework.Apollo.Util.Http;
+
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
+
 using System.Runtime.ExceptionServices;
 
 namespace Com.Ctrip.Framework.Apollo.Internals
@@ -236,7 +238,7 @@ namespace Com.Ctrip.Framework.Apollo.Internals
                 }
                 catch (Exception ex)
                 {
-                    Logger().Warn($"Sync config failed, will retry. Repository {GetType()}, reason: {ex.GetDetailMessage()}");
+                    Logger().Warn($"Sync config failed, will retry. Repository {GetType()}, reason: {ex.GetDetailMessage()}", ex);
                 }
             });
         }
