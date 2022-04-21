@@ -29,9 +29,7 @@
   <ItemGroup Condition="'$(Configuration)' == 'Release'">
     <None Include="$(PackageId).props" Pack="True" PackagePath="build/net40;build/net45" />
     <None Include="bin/Release/net45/Com.Ctrip.Framework.Apollo.dll" Pack="True" PackagePath="build/net40" />
-    <None Include="bin/Release/net45/Com.Ctrip.Framework.Apollo.pdb" Pack="True" PackagePath="build/net40" />
     <None Include="bin/Release/net471/$(AssemblyName).dll" Pack="True" PackagePath="build/net40;build/net45" />
-    <None Include="bin/Release/net471/$(AssemblyName).pdb" Pack="True" PackagePath="build/net40;build/net45" />
   </ItemGroup>
 
   <ItemGroup Condition="'$(TargetFrameworkIdentifier)' == '.NETFramework'">
