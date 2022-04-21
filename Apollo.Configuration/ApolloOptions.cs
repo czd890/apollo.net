@@ -1,6 +1,7 @@
 ﻿using Com.Ctrip.Framework.Apollo.Core;
 using Com.Ctrip.Framework.Apollo.Enums;
 using Com.Ctrip.Framework.Apollo.Foundation;
+
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -57,20 +58,20 @@ public class ApolloOptions : IApolloOptions
     /// <summary>Default Dev</summary>
     public virtual Env Env { get; set; } = Env.Dev;
 
-        private string _localIp;
-        public virtual string LocalIp
+    private string? _localIp;
+    public virtual string LocalIp
+    {
+        get
         {
-            get
+            if (_localIp == null)
             {
-                if (_localIp == null)
-                {
-                    return _localIp = NetworkInterfaceManager.GetHostIp(this.PreferLocalIpAddress);
-                }
-                return _localIp;
+                return _localIp = NetworkInterfaceManager.GetHostIp(this.PreferLocalIpAddress);
             }
-            set => _localIp = value;
+            return _localIp;
         }
-
+        set => _localIp = value;
+    }
+    public virtual string? PreferLocalIpAddress { get; set; }
     /// <summary>Default http://localhost:8080</summary>
     public virtual string? MetaServer
     {
@@ -113,7 +114,7 @@ public class ApolloOptions : IApolloOptions
         }
     }
 
-    [Obsolete("请使用HttpMessageHandler", true)]
+    [Obsolete("Please use HttpMessageHandler", true)]
     public Func<HttpMessageHandler> HttpMessageHandlerFactory
     {
         get => () => _handler;

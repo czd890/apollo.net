@@ -2,6 +2,7 @@
 using Com.Ctrip.Framework.Apollo.Enums;
 using Com.Ctrip.Framework.Apollo.Foundation;
 using Com.Ctrip.Framework.Apollo.Logging;
+
 using System.Collections.ObjectModel;
 using System.Configuration;
 
@@ -114,13 +115,13 @@ public class ConfigUtil : IApolloOptions
     /// <returns> the cluster name, or "default" if not specified </returns>
     public string Cluster { get; private set; } = ConfigConsts.ClusterNameDefault;
 
-        /// <summary>
-        /// Get the current environment.
-        /// </summary>
-        /// <returns> the env </returns>
-        public Env Env => Enum.TryParse(GetAppConfig(nameof(Env)), true, out Env env) ? env : Env.Dev;
-        public string PreferLocalIpAddress => GetAppConfig("PreferLocalIpAddress");
-        public string LocalIp { get; set; } = NetworkInterfaceManager.GetHostIp(GetAppConfig("PreferLocalIpAddress"));
+    /// <summary>
+    /// Get the current environment.
+    /// </summary>
+    /// <returns> the env </returns>
+    public Env Env => Enum.TryParse(GetAppConfig(nameof(Env)), true, out Env env) ? env : Env.Dev;
+    public string? PreferLocalIpAddress => GetAppConfig("PreferLocalIpAddress");
+    public string LocalIp { get; set; } = NetworkInterfaceManager.GetHostIp(GetAppConfig("PreferLocalIpAddress"));
 
     public string MetaServer => GetAppConfig(nameof(MetaServer)) ?? MetaDomainHelper.GetDomain(Env);
 

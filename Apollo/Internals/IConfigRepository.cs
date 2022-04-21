@@ -1,17 +1,16 @@
 ﻿using Com.Ctrip.Framework.Apollo.Core.Utils;
 using Com.Ctrip.Framework.Apollo.Enums;
 
-namespace Com.Ctrip.Framework.Apollo.Internals
-{
-    public interface IConfigRepository : IDisposable
-    {
+namespace Com.Ctrip.Framework.Apollo.Internals;
 
-        string Namespace { get; }
-        ConfigFileFormat Format { get; }
-        /// <summary>
-        /// Get the config from this repository. </summary>
-        /// <returns> config </returns>
-        Properties GetConfig();
+public interface IConfigRepository : IDisposable
+{
+    string Namespace { get; }
+    ConfigFileFormat Format { get; }
+    /// <summary>
+    /// Get the config from this repository. </summary>
+    /// <returns> config </returns>
+    Properties GetConfig();
 
     Task Initialize();
 

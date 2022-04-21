@@ -1,4 +1,5 @@
 ﻿using Com.Ctrip.Framework.Apollo.Enums;
+
 using System.Collections.ObjectModel;
 
 namespace Com.Ctrip.Framework.Apollo;
@@ -34,8 +35,8 @@ public interface IApolloOptions : IDisposable
 #else
     IReadOnlyCollection<string>? ConfigServer { get; }
 #endif
-        /// <summary>Load config timeout. ms</summary>
-        string PreferLocalIpAddress { get; }
+    /// <summary>Load config timeout. ms</summary>
+    string? PreferLocalIpAddress { get; }
 
     /// <summary>Load config timeout. ms</summary>
     int Timeout { get; }

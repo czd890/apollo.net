@@ -8,7 +8,7 @@ namespace Com.Ctrip.Framework.Apollo.Foundation
 {
     public class NetworkInterfaceManager
     {
-        private static readonly UnicastIPAddressInformation[] hostIps;
+        private static readonly UnicastIPAddressInformation[] hostIps = default!;
         static NetworkInterfaceManager()
         {
             try
@@ -34,14 +34,14 @@ namespace Com.Ctrip.Framework.Apollo.Foundation
 
         public static string HostIp { get; } = "127.0.0.1";
 
-        public static string GetHostIp(string preferLocalIpAddress)
+        public static string GetHostIp(string? preferLocalIpAddress)
         {
             if (string.IsNullOrEmpty(preferLocalIpAddress))
             {
                 return HostIp;
             }
 
-            foreach (var prefer in preferLocalIpAddress.Split(','))
+            foreach (var prefer in preferLocalIpAddress!.Split(','))
             {
                 if (string.IsNullOrEmpty(prefer))
                 {

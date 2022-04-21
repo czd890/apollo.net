@@ -2,17 +2,15 @@
 using Com.Ctrip.Framework.Apollo.Internals;
 using Com.Ctrip.Framework.Apollo.Spi;
 
-namespace Com.Ctrip.Framework.Apollo
-{
-    /// <summary>
-    /// Entry point for client config use
-    /// </summary>
-    [Obsolete("Not recommended for use，Recommended use Microsoft.Extensions.Configuration.IConfiguration")]
-    public class ApolloConfigurationManager
-    {
-        private static IConfigManager? _manager;
+namespace Com.Ctrip.Framework.Apollo;
 
-        public static IConfigManager Manager => _manager ?? throw new InvalidOperationException("Please invoke 'AddApollo(options)' init apollo at the beginning.");
+/// <summary>
+/// Entry point for client config use
+/// </summary>
+[Obsolete("Not recommended for use，Recommended use Microsoft.Extensions.Configuration.IConfiguration")]
+public class ApolloConfigurationManager
+{
+    public static IConfigManager Manager => ApolloConfigurationManagerHelper.Manager;
 
     /// <summary>
     /// Get Application's config instance. </summary>
@@ -52,7 +50,7 @@ internal class ApolloConfigurationManagerHelper
 {
     private static IConfigManager? _manager;
 
-    public static IConfigManager Manager => _manager ?? throw new InvalidOperationException("请在使用之前调用AddApollo");
+    public static IConfigManager Manager => _manager ?? throw new InvalidOperationException("Please invoke 'AddApollo(options)' init apollo at the beginning.");
 
     internal static void SetApolloOptions(ConfigRepositoryFactory factory) =>
         Interlocked.CompareExchange(ref _manager, new DefaultConfigManager(new DefaultConfigRegistry(), factory), null);

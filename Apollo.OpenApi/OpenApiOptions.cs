@@ -6,6 +6,5 @@ public class OpenApiOptions
 
     public string? Token { get; set; }
 
-        public int Timeout { get; set; } = 5000;
-    }
+    public int Timeout { get; set; } = 5000;
 }

@@ -26,9 +26,9 @@ namespace Microsoft.Extensions.Configuration
                 throw new InvalidOperationException("Do not repeat init apollo");
             }
             var repositoryFactory = new ConfigRepositoryFactory(options ?? throw new ArgumentNullException(nameof(options)));
-#pragma warning disable 618
-            ApolloConfigurationManager.SetApolloOptions(repositoryFactory);
-#pragma warning restore 618
+
+            ApolloConfigurationManagerHelper.SetApolloOptions(repositoryFactory);
+
             var apolloBuilder = new ApolloConfigurationBuilder(builder, repositoryFactory);
             builder.Properties[typeof(ApolloConfigurationExtensions).FullName] = apolloBuilder;
 

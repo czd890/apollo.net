@@ -9,14 +9,14 @@ using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Com.Ctrip.Framework.Apollo
+namespace Com.Ctrip.Framework.Apollo;
+
+[DebuggerDisplay("SectionKey={SectionKey}, Namespace={ConfigRepository.Namespace}, Format={ConfigRepository.Format}")]
+public class ApolloConfigurationProvider : ConfigurationProvider, IRepositoryChangeListener, IConfigurationSource, IDisposable
 {
-    [DebuggerDisplay("SectionKey={SectionKey}, Namespace={ConfigRepository.Namespace}, Format={ConfigRepository.Format}")]
-    public class ApolloConfigurationProvider : ConfigurationProvider, IRepositoryChangeListener, IConfigurationSource, IDisposable
-    {
-        internal string? SectionKey { get; }
-        internal IConfigRepository ConfigRepository { get; }
-        private Task? _initializeTask;
+    internal string? SectionKey { get; }
+    internal IConfigRepository ConfigRepository { get; }
+    private Task? _initializeTask;
 
     public ApolloConfigurationProvider(string? sectionKey, IConfigRepository configRepository)
     {
