@@ -34,19 +34,29 @@
 
       $(PackageReleaseNotes)
     </Description>
-
-    <PackageIconUrl>https://raw.githubusercontent.com/ctripcorp/apollo/master/apollo-portal/src/main/resources/static/img/config.png</PackageIconUrl>
-    <PackageProjectUrl>$(RepositoryUrl)/$(MSBuildProjectName)</PackageProjectUrl>
     <PackageTags>$(PackageTags) ConfigurationBuilder ConfigurationManager</PackageTags>
-    <TargetFrameworks>net471;net45;net40;netstandard2.0</TargetFrameworks>
     <RootNamespace>Com.Ctrip.Framework.Apollo</RootNamespace>
+    <TargetFrameworks>net471;net45;net40;netstandard2.0;netstandard2.1</TargetFrameworks>
+    <Version>$(ApolloVersion).2</Version>
     <PackageId>Xignite.Apollo.ConfigurationManager</PackageId>
    
   </PropertyGroup>
 
   <ItemGroup>
+    <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
+      <_Parameter1>Apollo.ConfigurationManager.Tests, PublicKey=002400000480000094000000060200000024000052534131000400000100010031b198cb1742fb12c699a60d820e6582ca8a8dbbd9383812f82bed299e06eab18931798fb14cc6ab80cda818032d15704f0e1c4aa5641b428f8a0decbfa1a30ab8d92efc7ec9cbd801f60c4b88b91c6acb704c20c6a061a7dae86601981164fb27be0c0beb3e6d5dbec1b83962a6d0b845ca09a52723237bd7083359b17830c0</_Parameter1>
+    </AssemblyAttribute>
+
     <ProjectReference Include="..\Apollo\Apollo.csproj" />
-    <PackageReference Include="System.Configuration.ConfigurationManager" Version="4.*" Condition="'$(TargetFramework)' == 'netstandard2.0'" />
+    <PackageReference Include="System.Configuration.ConfigurationManager" Version="4.*" Condition="'$(TargetFrameworkIdentifier)' == '.NETStandard'" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(Configuration)' == 'Release'">
+    <None Include="$(PackageId).props" Pack="True" PackagePath="build/net40;build/net45" />
+    <None Include="bin/Release/net45/Com.Ctrip.Framework.Apollo.dll" Pack="True" PackagePath="build/net40" />
+    <None Include="bin/Release/net45/Com.Ctrip.Framework.Apollo.pdb" Pack="True" PackagePath="build/net40" />
+    <None Include="bin/Release/net471/$(AssemblyName).dll" Pack="True" PackagePath="build/net40;build/net45" />
+    <None Include="bin/Release/net471/$(AssemblyName).pdb" Pack="True" PackagePath="build/net40;build/net45" />
   </ItemGroup>
 
   <ItemGroup Condition="'$(TargetFrameworkIdentifier)' == '.NETFramework'">
@@ -56,9 +66,7 @@
   </ItemGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' != 'net471'">
-    <Compile Remove="ApolloConfigurationBuilder.cs" />
-    <Compile Remove="AppSettingsSectionBuilder.cs" />
-    <Compile Remove="ConnectionStringsSectionBuilder.cs" />
+    <Compile Remove="*Builder.cs" />
   </ItemGroup>
 
 </Project>

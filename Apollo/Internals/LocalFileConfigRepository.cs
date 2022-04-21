@@ -4,22 +4,19 @@ using Com.Ctrip.Framework.Apollo.Enums;
 using Com.Ctrip.Framework.Apollo.Exceptions;
 using Com.Ctrip.Framework.Apollo.Logging;
 using Com.Ctrip.Framework.Apollo.Util;
-using System;
-using System.IO;
-using System.Threading.Tasks;
 
-namespace Com.Ctrip.Framework.Apollo.Internals
+namespace Com.Ctrip.Framework.Apollo.Internals;
+
+public class LocalFileConfigRepository : AbstractConfigRepository, IRepositoryChangeListener
 {
-    public class LocalFileConfigRepository : AbstractConfigRepository, IRepositoryChangeListener
-    {
-        private static readonly Func<Action<LogLevel, string, Exception?>> Logger = () => LogManager.CreateLogger(typeof(LocalFileConfigRepository));
-        private const string ConfigDir = "config-cache";
+    private static readonly Func<Action<LogLevel, string, Exception?>> Logger = () => LogManager.CreateLogger(typeof(LocalFileConfigRepository));
+    private const string ConfigDir = "config-cache";
 
-        private string? _baseDir;
-        private volatile Properties? _fileProperties;
+    private string? _baseDir;
+    private volatile Properties? _fileProperties;
 
-        private readonly IApolloOptions _options;
-        private readonly IConfigRepository? _upstream;
+    private readonly IApolloOptions _options;
+    private readonly IConfigRepository? _upstream;
 
         public LocalFileConfigRepository(string @namespace,
             IApolloOptions configUtil,
@@ -40,177 +37,178 @@ namespace Com.Ctrip.Framework.Apollo.Internals
             return format;
         }
 
-        public override async Task Initialize()
+    public override async Task Initialize()
+    {
+        if (_upstream != null)
         {
-            if (_upstream != null)
-            {
-                await _upstream.Initialize().ConfigureAwait(false);
+            await _upstream.Initialize().ConfigureAwait(false);
 
-                _upstream.AddChangeListener(this);
+            _upstream.AddChangeListener(this);
 
-                //sync with upstream immediately
-                if (TrySyncFromUpstream()) return;
-            }
-
-            if (_baseDir == null) return;
-
-            try
-            {
-                _fileProperties = LoadFromLocalCacheFile(_baseDir, Namespace);
-            }
-            catch (Exception ex)
-            {
-                Logger().Warn(ex);
-            }
+            //sync with upstream immediately
+            if (TrySyncFromUpstream()) return;
         }
 
-        public override Properties GetConfig()
+        if (_baseDir == null) return;
+
+        try
         {
-            var properties = _fileProperties == null ? new Properties() : new Properties(_fileProperties);
-
-            if (Format == ConfigFileFormat.Properties || !ConfigAdapterRegister.TryGetAdapter(Format, out var adapter))
-                return properties;
-
-            try
-            {
-                return adapter.GetProperties(properties);
-            }
-            catch (Exception ex)
-            {
-                throw new ApolloConfigException($"Config Error! AppId: {_options.AppId}, Namespace: {Namespace}", ex);
-            }
+            _fileProperties = LoadFromLocalCacheFile(_baseDir, Namespace);
         }
-
-        private bool _disposed;
-        protected override void Dispose(bool disposing)
+        catch (Exception ex)
         {
-            if (_disposed)
-                return;
+            Logger().Warn(ex);
+        }
+    }
 
-            if (disposing)
-            {
-                _upstream?.Dispose();
-            }
+    public override Properties GetConfig()
+    {
+        var properties = _fileProperties == null ? new Properties() : new Properties(_fileProperties);
+
+        if (Format == ConfigFileFormat.Properties || !ConfigAdapterRegister.TryGetAdapter(Format, out var adapter))
+            return properties;
+
+        try
+        {
+            return adapter.GetProperties(properties);
+        }
+        catch (Exception ex)
+        {
+            throw new ApolloConfigException($"Config Error! AppId: {_options.AppId}, Namespace: {Namespace}", ex);
+        }
+    }
+
+    private bool _disposed;
+    protected override void Dispose(bool disposing)
+    {
+        if (_disposed)
+            return;
+
+        if (disposing)
+        {
+            _upstream?.Dispose();
+        }
 
             _disposed = true;
         }
 
-        private bool TrySyncFromUpstream()
+    private bool TrySyncFromUpstream()
+    {
+        if (_upstream == null) return false;
+
+        try
         {
-            if (_upstream == null) return false;
+            var properties = _upstream.GetConfig();
 
-            try
-            {
-                var properties = _upstream.GetConfig();
+            UpdateFileProperties(properties);
 
-                UpdateFileProperties(properties);
-
-                return true;
-            }
-            catch (Exception ex)
-            {
-                Logger().Warn(
-                    $"Sync config from upstream repository {_upstream.GetType()} failed, reason: {ex.GetDetailMessage()}");
-            }
-
-            return false;
+            return true;
+        }
+        catch (Exception ex)
+        {
+            Logger().Warn(
+                $"Sync config from upstream repository {_upstream.GetType()} failed, reason: {ex.GetDetailMessage()}");
         }
 
-        public void OnRepositoryChange(string namespaceName, Properties newProperties)
+        return false;
+    }
+
+    public void OnRepositoryChange(string namespaceName, Properties newProperties)
+    {
+        UpdateFileProperties(new Properties(newProperties));
+
+        FireRepositoryChange(namespaceName, GetConfig());
+    }
+
+    private void UpdateFileProperties(Properties newProperties)
+    {
+        if (_baseDir == null) return;
+
+        lock (this)
         {
-            UpdateFileProperties(new Properties(newProperties));
+            if (newProperties.Equals(_fileProperties)) return;
 
-            FireRepositoryChange(namespaceName, GetConfig());
-        }
+            _fileProperties = newProperties;
 
-        private void UpdateFileProperties(Properties newProperties)
-        {
-            if (_baseDir == null) return;
-
-            lock (this)
-            {
-                if (newProperties.Equals(_fileProperties)) return;
-
-                _fileProperties = newProperties;
-
-                PersistLocalCacheFile(_baseDir, Namespace);
-            }
-        }
-
-        private Properties LoadFromLocalCacheFile(string baseDir, string namespaceName)
-        {
-            if (string.IsNullOrWhiteSpace(baseDir))
-            {
-                throw new ApolloConfigException("Basedir cannot be empty");
-            }
-
-            var file = AssembleLocalCacheFile(baseDir, namespaceName);
-
-            try
-            {
-                var properties = _options.CacheFileProvider.Get(file);
-
-                Logger().Debug($"Loading local config file {file} successfully!");
-
-                return properties;
-            }
-            catch (Exception ex)
-            {
-                throw new ApolloConfigException($"Loading config from local cache file {file} failed", ex);
-            }
-        }
-
-        private void PersistLocalCacheFile(string baseDir, string namespaceName)
-        {
-            var properties = _fileProperties;
-            if (baseDir == null || properties == null) return;
-
-            var file = AssembleLocalCacheFile(baseDir, namespaceName);
-
-            try
-            {
-                _options.CacheFileProvider.Save(file, properties);
-            }
-            catch (Exception ex)
-            {
-                Logger().Warn($"Persist local cache file {file} failed, reason: {ex.GetDetailMessage()}.", ex);
-            }
-        }
-
-        private void PrepareConfigCacheDir()
-        {
-            try
-            {
-                _baseDir = Path.Combine(_options.LocalCacheDir, ConfigDir);
-            }
-            catch (Exception ex)
-            {
-                Logger().Warn(new ApolloConfigException("Prepare config cache dir failed", ex));
-                return;
-            }
-
-            CheckLocalConfigCacheDir(_baseDir);
-        }
-
-        private static void CheckLocalConfigCacheDir(string baseDir)
-        {
-            if (Directory.Exists(baseDir)) return;
-
-            try
-            {
-                Directory.CreateDirectory(baseDir);
-            }
-            catch (Exception ex)
-            {
-                Logger().Warn($"Unable to create local config cache directory {baseDir}, reason: {ex.GetDetailMessage()}. Will not able to cache config file.", ex);
-            }
-        }
-
-        private string AssembleLocalCacheFile(string baseDir, string namespaceName)
-        {
-            var fileName = $"{string.Join(ConfigConsts.ClusterNamespaceSeparator, _options.AppId, _options.Cluster, namespaceName)}.json";
-
-            return Path.Combine(baseDir, fileName);
+            PersistLocalCacheFile(_baseDir, Namespace);
         }
     }
+
+    private Properties LoadFromLocalCacheFile(string baseDir, string namespaceName)
+    {
+        if (string.IsNullOrWhiteSpace(baseDir))
+        {
+            throw new ApolloConfigException("Basedir cannot be empty");
+        }
+
+        var file = AssembleLocalCacheFile(baseDir, namespaceName);
+
+        try
+        {
+            var properties = _options.CacheFileProvider.Get(file);
+
+            Logger().Debug($"Loading local config file {file} successfully!");
+
+            return properties;
+        }
+        catch (Exception ex)
+        {
+            throw new ApolloConfigException($"Loading config from local cache file {file} failed", ex);
+        }
+    }
+
+    private void PersistLocalCacheFile(string? baseDir, string namespaceName)
+    {
+        var properties = _fileProperties;
+        if (baseDir == null || properties == null) return;
+
+        var file = AssembleLocalCacheFile(baseDir, namespaceName);
+
+        try
+        {
+            _options.CacheFileProvider.Save(file, properties);
+        }
+        catch (Exception ex)
+        {
+            Logger().Warn($"Persist local cache file {file} failed, reason: {ex.GetDetailMessage()}.", ex);
+        }
+    }
+
+    private void PrepareConfigCacheDir()
+    {
+        try
+        {
+            _baseDir = Path.Combine(_options.LocalCacheDir, ConfigDir);
+        }
+        catch (Exception ex)
+        {
+            Logger().Warn(new ApolloConfigException("Prepare config cache dir failed", ex));
+            return;
+        }
+
+        CheckLocalConfigCacheDir(_baseDir);
+    }
+
+    private static void CheckLocalConfigCacheDir(string baseDir)
+    {
+        if (Directory.Exists(baseDir)) return;
+
+        try
+        {
+            Directory.CreateDirectory(baseDir);
+        }
+        catch (Exception ex)
+        {
+            Logger().Warn($"Unable to create local config cache directory {baseDir}, reason: {ex.GetDetailMessage()}. Will not able to cache config file.", ex);
+        }
+    }
+
+    private string AssembleLocalCacheFile(string baseDir, string namespaceName)
+    {
+        var fileName = $"{string.Join(ConfigConsts.ClusterNamespaceSeparator, _options.AppId, _options.Cluster, namespaceName)}.json";
+
+        return Path.Combine(baseDir, fileName);
+    }
+
+    public override string ToString() => $"local {_options.AppId} {Namespace}";
 }

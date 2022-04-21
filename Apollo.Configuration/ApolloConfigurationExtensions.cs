@@ -3,8 +3,6 @@ using Com.Ctrip.Framework.Apollo.Core;
 using Com.Ctrip.Framework.Apollo.Enums;
 using Com.Ctrip.Framework.Apollo.Internals;
 using Com.Ctrip.Framework.Apollo.Spi;
-using System;
-using System.Linq;
 
 // ReSharper disable once CheckNamespace
 namespace Microsoft.Extensions.Configuration
@@ -96,9 +94,8 @@ namespace Com.Ctrip.Framework.Apollo
             else
             {
                 builder.Add(new ApolloConfigurationProvider(sectionKey, configRepository));
-#pragma warning disable 618
-                ApolloConfigurationManager.Manager.Registry.Register(@namespace, new DefaultConfigFactory(builder.ConfigRepositoryFactory));
-#pragma warning restore 618
+
+                ApolloConfigurationManagerHelper.Manager.Registry.Register(@namespace, new DefaultConfigFactory(builder.ConfigRepositoryFactory));
             }
 
             return builder;

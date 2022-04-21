@@ -1,60 +1,38 @@
-﻿using System;
-using System.Collections.Specialized;
-using System.Configuration;
-using System.Linq;
+﻿using System.Configuration;
 
-namespace Com.Ctrip.Framework.Apollo
+namespace Com.Ctrip.Framework.Apollo;
+
+public class ConnectionStringsSectionBuilder : ApolloConfigurationBuilder
 {
-    public class ConnectionStringsSectionBuilder : ApolloConfigurationBuilder
+    private string? _keyPrefix;
+
+    private string? _defaultProviderName;
+
+    public override void Initialize(string name, NameValueCollection config)
     {
-        private string? _defaultProviderName;
-        public override void Initialize(string name, NameValueCollection config)
-        {
-            base.Initialize(name, config);
+        base.Initialize(name, config);
 
-            _defaultProviderName = config["defaultProviderName"] ?? "System.Data.SqlClient";
-        }
+        _keyPrefix = config["keyPrefix"]?.TrimEnd(':');
 
-        public override ConfigurationSection ProcessConfigurationSection(ConfigurationSection configSection)
+        _defaultProviderName = config["defaultProviderName"] ?? "System.Data.SqlClient";
+    }
+
+    public override ConfigurationSection ProcessConfigurationSection(ConfigurationSection configSection)
+    {
+        if (configSection is not ConnectionStringsSection section) return base.ProcessConfigurationSection(configSection);
+
+        var connectionStrings = section.ConnectionStrings;
+
+        lock (this)
         {
-            if (configSection is ConnectionStringsSection section)
+            foreach (var connectionString in GetConfig().GetConnectionStrings(_keyPrefix ?? configSection.SectionInformation.Name, _defaultProviderName))
             {
-                var connectionStrings = section.ConnectionStrings;
-                lock (this)
-                {
-                    var config = GetConfig();
-                    var names = config.GetPropertyNames()
-                        .Where(name => name.StartsWith("ConnectionStrings:", StringComparison.OrdinalIgnoreCase))
-                        .GroupBy(name => name.Substring(18).Split(':')[0])
-                        .ToDictionary(group => group.Key, group => group.ToArray());
+                connectionStrings.Remove(connectionString.Name);
 
-                    foreach (var name in names)
-                    {
-                        var connectionName = name.Key;
-                        if (name.Value.Length == 1)
-                        {
-                            if (!config.TryGetProperty(name.Value[0], out var connectionString) ||
-                                string.IsNullOrWhiteSpace(connectionString)) continue;
-
-                            connectionStrings.Remove(connectionName);
-
-                            connectionStrings.Add(new ConnectionStringSettings(connectionName, connectionString, _defaultProviderName));
-                        }
-                        else
-                        {
-                            if (!config.TryGetProperty($"ConnectionStrings:{connectionName}:ConnectionString", out var connectionString) ||
-                                !config.TryGetProperty($"ConnectionStrings:{connectionName}", out connectionString) ||
-                                string.IsNullOrWhiteSpace(connectionString)) continue;
-
-                            config.TryGetProperty($"ConnectionStrings:{connectionName}:ProviderName", out var providerName);
-
-                            connectionStrings.Add(new ConnectionStringSettings(connectionName, connectionString, providerName ?? _defaultProviderName));
-                        }
-                    }
-                }
+                connectionStrings.Add(connectionString);
             }
-
-            return base.ProcessConfigurationSection(configSection);
         }
+
+        return base.ProcessConfigurationSection(configSection);
     }
 }

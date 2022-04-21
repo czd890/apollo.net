@@ -1,11 +1,11 @@
-﻿# 一、准备工作
+﻿﻿﻿# 一、准备工作
 
 > 如果想将传统的config配置（如web.config）转成json配置，可以使用[config2json](https://github.com/andrewlock/dotnet-config2json)工具
 
 ## 1.1 环境要求
-    
-* NETFramework 4.5+
-* NETFramework 4.7.1+（支持[ConfigurationBuilder](https://docs.microsoft.com/zh-cn/dotnet/api/system.configuration.configurationbuilder)）
+
+* NETFramework 4.0+（4.7.1+支持[ConfigurationBuilder](https://docs.microsoft.com/zh-cn/dotnet/api/system.configuration.configurationbuilder)）
+* [NETStandard 2.0](https://github.com/dotnet/standard/blob/master/docs/versions/netstandard2.0.md#platform-support)
 
 ## 1.2 必选设置
 Apollo客户端依赖于`AppId`，`Environment`等环境信息来工作，所以请确保阅读下面的说明并且做正确的配置：
@@ -93,7 +93,7 @@ Apollo支持配置按照集群划分，也就是说对于一个appId和一个环
 
 * 我们可以在App.config或Web.Config文件中设置Apollo:Cluster来指定运行时集群（注意大小写）
 * 例如，下面的截图配置指定了运行时的集群为SomeCluster
-* ![apollo-net-apollo-cluster](https://raw.githubusercontent.com/ctripcorp/apollo/master/doc/images/apollo-net-apollo-cluster.png)
+* ![apollo-net-apollo-cluster](https://raw.githubusercontent.com/apolloconfig/apollo/master/doc/images/apollo-net-apollo-cluster.png)
 
 **Cluster Precedence**（集群顺序）
 
@@ -125,7 +125,7 @@ Apollo支持配置按照集群划分，也就是说对于一个appId和一个环
 1. Apollo.XXX => Apollo:XXX
 2. Apollo.{ENV}.Meta => Apollo:Meta:{ENV}
 
-> 优先级低于原来的方式，具体可以参考[Demo](https://github.com/ctripcorp/apollo.net/tree/dotnet-core/Apollo.ConfigurationManager.Demo)或者[Tests](https://github.com/ctripcorp/apollo.net/tree/dotnet-core/Apollo.ConfigurationManager.Tests)
+> 优先级低于原来的方式，具体可以参考[Demo](https://github.com/apolloconfig/apollo.net/tree/main/Apollo.ConfigurationManager.Demo)或者[Tests](https://github.com/apolloconfig/apollo.net/tree/main/Apollo.ConfigurationManager.Tests)
 
 # 二、引入方式
 
@@ -189,40 +189,69 @@ string value = config.GetProperty(someKey, someDefaultValue);
 ## 3.4 Demo
 
 apollo.net项目中有多个样例客户端的项目：
-* [Apollo.AspNet.Demo](https://github.com/ctripcorp/apollo.net/tree/dotnet-core/Apollo.AspNet.Demo)（通过Web.config配置）
-* [Apollo.ConfigurationManager.Demo](https://github.com/ctripcorp/apollo.net/tree/dotnet-core/Apollo.ConfigurationManager.Demo)（通过环境变量配置）
+* [Apollo.AspNet.Demo](https://github.com/apolloconfig/apollo.net/tree/main/Apollo.AspNet.Demo)（通过Web.config配置）
+* [Apollo.ConfigurationManager.Demo](https://github.com/apolloconfig/apollo.net/tree/main/Apollo.ConfigurationManager.Demo)（通过环境变量配置）
 
 # 四、NETFramework 4.7.1+ ConfigurationBuilder支持
 
-## 4.1 ApolloConfigurationBuilder说明
+## 4.1 ApolloConfigurationBuilder
 ``` xml
 <configuration>
     <configBuilders>
         <builders>
-            <add name="ApolloConfigBuilder1" type="Com.Ctrip.Framework.Apollo.AppSettingsSectionBuilder, Com.Ctrip.Framework.Apollo.ConfigurationManager" namespace="TEST1.test;application" />
+            <add name="ApolloConfigBuilder1" type="Com.Ctrip.Framework.Apollo.AppSettingsSectionBuilder, Com.Ctrip.Framework.Apollo.ConfigurationManager" namespace="TEST1.test;application" keyPrefix="可选值" />
         </builders>
     </configBuilders>
 </configuration>
-
 ```
 * namespace为可选值，该值对应apollo中的namespace。支持多个值，以`,`或`;`分割，优先级从低到高
+* keyPrefix为可选值，当值不是IsNullOrWhiteSpace时生效
 
-## 4.2 ConnectionStringsSectionBuilder使用说明
+## 4.2 ConnectionStringsSectionBuilder
 ``` xml
 <configuration>
     <configBuilders>
         <builders>
-            <add name="ConnectionStringsSectionBuilder1" type="Com.Ctrip.Framework.Apollo.ConnectionStringsSectionBuilder, Com.Ctrip.Framework.Apollo.ConfigurationManager" namespace="TEST1.test" defaultProviderName="MySql.Data.MySqlClient" />
+            <add name="ConnectionStringsSectionBuilder1" type="Com.Ctrip.Framework.Apollo.ConnectionStringsSectionBuilder, Com.Ctrip.Framework.Apollo.ConfigurationManager" namespace="TEST1.test" keyPrefix="可选值" defaultProviderName="MySql.Data.MySqlClient" />
         </builders>
     </configBuilders>
 </configuration>
-
 ```
 * namespace为可选值，该值对应apollo中的namespace。支持多个值，以`,`或`;`分割，优先级从低到高
 * defaultProviderName为可选值，默认值为System.Data.SqlClient,，对应ConnectionString的ProviderName。
-* key必须以ConnectionStrings:开始
+* keyPrefix为可选值，没有配置时值为节点名（一般是connectionStrings），值是WhiteSpace时则不生效
 * 通过ConnectionStrings:ConnectionName:ConnectionString或者ConnectionStrings:ConnectionName来设置连接字符串（同时指定时ConnectionStrings:ConnectionName:ConnectionString优先级高）
 * 通过ConnectionStrings:ConnectionName:ProviderName来指定使用其他数据库，比如MySql.Data.MySqlClient来指定是MySql
+
+## 4.3 CommonSectionBuilder
+
+通过反射结点类型，动态递归添加到节点类型中，此方法灵活，适应绝大部分节点。通过读取属性的[ConfigurationProperty]值和配置中的值关联
+
+``` xml
+<configuration>
+    <configBuilders>
+        <builders>
+            <add name="CommonSectionBuilder" type="Com.Ctrip.Framework.Apollo.CommonSectionBuilder, Com.Ctrip.Framework.Apollo.ConfigurationManager" namespace="TEST1.test" keyPrefix="可选值" />
+        </builders>
+    </configBuilders>
+</configuration>
+```
+* namespace为可选值，该值对应apollo中的namespace。支持多个值，以`,`或`;`分割，优先级从低到高
+* keyPrefix为可选值，没有配置时值为节点名，值是WhiteSpace时则不生效
+
+## 4.4 NodeReplaceSectionBuilder
+直接使用apollo中配置的xml替换掉原来的节点xml
+``` xml
+<configuration>
+    <configBuilders>
+        <builders>
+            <add name="NodeReplaceSectionBuilder" type="Com.Ctrip.Framework.Apollo.NodeReplaceSectionBuilder, Com.Ctrip.Framework.Apollo.ConfigurationManager" namespace="TEST1.test" key="可选值" />
+        </builders>
+    </configBuilders>
+</configuration>
+```
+* namespace为可选值，该值对应apollo中的namespace。支持多个值，以`,`或`;`分割，优先级从低到高
+* key为可选值，当为IsNullOrWhiteSpace时值为节点名
 
 # 五、FAQ
 
@@ -231,7 +260,7 @@ apollo.net项目中有多个样例客户端的项目：
 在读取任何配置之前执行如下代码
 
 ``` C#
-ConfigUtil.UseHttpMessageHandlerFactory(() => new HttpClientHandler
+ConfigUtil.UseHttpMessageHandler(new HttpClientHandler
 {
     UseProxy = true,
     Proxy = new WebProxy(new Uri("http://代理地址"))
@@ -261,3 +290,14 @@ ConfigUtil.UseHttpMessageHandlerFactory(() => new HttpClientHandler
 ## 5.4 如何优先使用环境变量
 
 配置Apollo.EnvironmentVariablePriority或者Apollo:EnvironmentVariablePriority值为1或者true（优先从环境变量中读取）后，则Apollo配置则优先从环境变量中读取（和现在读取顺序相反）
+
+## 5.5 如何不更改framework版本的情况下使用ConfigurationBuilder
+
+1. 运行时必须是.NET Framework 4.7.1+
+2. 在项目文件的PropertyGroup节点里添加<UseApolloConfigurationBuilder>true</UseApolloConfigurationBuilder>
+
+> 在4.0版本中使用此功能时不建议使用ApolloConfigurationManager（可能存在运行时错误）。
+
+## 5.6 如何允许类似Sping的[PlaceHolder功能](https://github.com/pengweiqhca/Microsoft.Extensions.Configuration.Placeholder)
+
+`<add key="Apollo:EnablePlaceholder" value="true" />`

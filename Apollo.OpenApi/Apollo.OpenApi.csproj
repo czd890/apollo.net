@@ -4,15 +4,14 @@
     <AssemblyName>Com.Ctrip.Framework.Apollo.OpenApi</AssemblyName>
     <PackageReleaseNotes></PackageReleaseNotes>
     <Description>Xignite Apollo OpenApi Client SDK，Please using services.AddApolloOpenApi() and .GetService&lt;IOpenApiFactory&gt;</Description>
-    <PackageIconUrl>https://raw.githubusercontent.com/ctripcorp/apollo/master/apollo-portal/src/main/resources/static/img/config.png</PackageIconUrl>
-    <PackageProjectUrl>$(RepositoryUrl)/$(MSBuildProjectName)</PackageProjectUrl>
     <TargetFrameworks>net40;net45;netstandard2.0</TargetFrameworks>
     <RootNamespace>Com.Ctrip.Framework.Apollo.OpenApi</RootNamespace>
     <PackageId>Xignite.Apollo.OpenApi</PackageId>
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Apollo\Apollo.csproj" PrivateAssets="All" />
+    <Compile Include="../Apollo/Core/ConfigConsts.cs" />
+
     <PackageReference Include="Microsoft.AspNet.WebApi.Client" Version="5.*" Condition="'$(TargetFramework)' != 'net40'" />
   </ItemGroup>
 

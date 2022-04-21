@@ -6,13 +6,7 @@ using Com.Ctrip.Framework.Apollo.Util;
 using Com.Ctrip.Framework.Apollo.Util.Http;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
 using System.Runtime.ExceptionServices;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace Com.Ctrip.Framework.Apollo.Internals
 {
@@ -157,7 +151,8 @@ namespace Com.Ctrip.Framework.Apollo.Internals
                     }
                     catch (Exception ex)
                     {
-                        Logger().Warn(ex);
+                        Logger().Warn("Load apollo config fail from " + configService, ex);
+
                         exception = ex;
                     }
                 }
@@ -259,6 +254,8 @@ namespace Com.Ctrip.Framework.Apollo.Internals
 
             _disposed = true;
         }
+
+        public override string ToString() => $"remote {_options.AppId} {Namespace}";
     }
 }
 #if NET40
