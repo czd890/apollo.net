@@ -27,7 +27,7 @@ namespace Microsoft.Extensions.Configuration
             }
             var repositoryFactory = new ConfigRepositoryFactory(options ?? throw new ArgumentNullException(nameof(options)));
 
-            ApolloConfigurationManagerHelper.SetApolloOptions(repositoryFactory);
+            //ApolloConfigurationManagerHelper.SetApolloOptions(repositoryFactory);
 
             var apolloBuilder = new ApolloConfigurationBuilder(builder, repositoryFactory);
             builder.Properties[typeof(ApolloConfigurationExtensions).FullName] = apolloBuilder;
@@ -89,13 +89,14 @@ namespace Com.Ctrip.Framework.Apollo
             if (previous != null)
             {
                 builder.Sources.Remove(previous);
+
                 builder.Sources.Add(previous);
             }
             else
             {
                 builder.Add(new ApolloConfigurationProvider(sectionKey, configRepository));
 
-                ApolloConfigurationManagerHelper.Manager.Registry.Register(@namespace, new DefaultConfigFactory(builder.ConfigRepositoryFactory));
+                //ApolloConfigurationManagerHelper.Manager.Registry.Register(@namespace, new DefaultConfigFactory(builder.ConfigRepositoryFactory));
             }
 
             return builder;

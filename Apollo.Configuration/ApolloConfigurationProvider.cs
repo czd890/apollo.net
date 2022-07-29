@@ -1,4 +1,5 @@
 ﻿using Com.Ctrip.Framework.Apollo.Core.Utils;
+using Com.Ctrip.Framework.Apollo.Enums;
 using Com.Ctrip.Framework.Apollo.Internals;
 
 using Microsoft.Extensions.Configuration;
@@ -12,12 +13,13 @@ using System.Threading.Tasks;
 namespace Com.Ctrip.Framework.Apollo;
 
 [DebuggerDisplay("SectionKey={SectionKey}, Namespace={ConfigRepository.Namespace}, Format={ConfigRepository.Format}")]
-public class ApolloConfigurationProvider : ConfigurationProvider, IRepositoryChangeListener, IConfigurationSource, IDisposable
+public class ApolloConfigurationProvider : ConfigurationProvider, IRepositoryChangeListener, IConfigurationSource/*, IDisposable*/
 {
-    internal string? SectionKey { get; }
     internal IConfigRepository ConfigRepository { get; }
     private Task? _initializeTask;
-
+    public string? SectionKey { get; }
+    public string Namespace => this.ConfigRepository.Namespace;
+    public ConfigFileFormat Format => this.ConfigRepository.Format;
     public ApolloConfigurationProvider(string? sectionKey, IConfigRepository configRepository)
     {
         SectionKey = sectionKey;
@@ -57,7 +59,10 @@ public class ApolloConfigurationProvider : ConfigurationProvider, IRepositoryCha
 
     IConfigurationProvider IConfigurationSource.Build(IConfigurationBuilder builder) => this;
 
-    public void Dispose() => ConfigRepository.RemoveChangeListener(this);
+    //public void Dispose()
+    //{
+    //    ConfigRepository.RemoveChangeListener(this);
+    //}
 
     public override string ToString() => string.IsNullOrEmpty(SectionKey)
         ? $"apollo {ConfigRepository}"

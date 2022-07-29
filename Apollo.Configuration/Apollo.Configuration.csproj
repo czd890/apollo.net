@@ -16,6 +16,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="ApolloConfigurationManager.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Using Include="Microsoft.Extensions.Configuration" />
 
     <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
