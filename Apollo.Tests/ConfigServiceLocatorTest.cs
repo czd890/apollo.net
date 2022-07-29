@@ -1,6 +1,5 @@
 ﻿using Com.Ctrip.Framework.Apollo;
 using Com.Ctrip.Framework.Apollo.Internals;
-using Com.Ctrip.Framework.Apollo.Util.Http;
 using Moq;
 using Xunit;
 
@@ -12,7 +11,7 @@ public class ConfigServiceLocatorTest
     public async Task MetaServerTest()
     {
         var moq = new Mock<IApolloOptions>();
-        moq.SetupGet(o => o.AppId).Returns("apollo-client");
+        moq.SetupGet(o => o.AppId).Returns("apollo.net");
         moq.SetupGet(o => o.MetaServer).Returns("http://106.54.227.205:8080/");
         moq.SetupGet(o => o.ConfigServer).Returns(Array.Empty<string>());
         moq.SetupGet(o => o.Timeout).Returns(5000);
@@ -20,7 +19,7 @@ public class ConfigServiceLocatorTest
 
         var options = moq.Object;
 
-        var locator = new ConfigServiceLocator(new HttpUtil(options), options);
+        var locator = new ConfigServiceLocator(new(options), options);
 
         var services = await locator.GetConfigServices().ConfigureAwait(false);
 
@@ -36,7 +35,7 @@ public class ConfigServiceLocatorTest
 
         var options = moq.Object;
 
-        var locator = new ConfigServiceLocator(new HttpUtil(options), options);
+        var locator = new ConfigServiceLocator(new(options), options);
 
         var services = await locator.GetConfigServices().ConfigureAwait(false);
 

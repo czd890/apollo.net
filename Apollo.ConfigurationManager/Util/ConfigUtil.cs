@@ -17,6 +17,7 @@ public class ConfigUtil : IApolloOptions
 
     private int _refreshInterval = 5 * 60 * 1000; //5 minutes
     private int _timeout = 5000; //5 seconds, c# has no connectTimeout but response timeout
+    private readonly int _startupTimeout = 30000;
 
     public ConfigUtil()
     {
@@ -25,6 +26,7 @@ public class ConfigUtil : IApolloOptions
         InitRefreshInterval();
         InitTimeout();
         InitCluster();
+        InitStartupTimeout();
     }
 
     /// <summary>
@@ -170,6 +172,19 @@ public class ConfigUtil : IApolloOptions
     public bool EnablePlaceholder => bool.TryParse(GetAppConfig(nameof(EnablePlaceholder)), out var enablePlaceholder) && enablePlaceholder;
 
     public ICacheFileProvider CacheFileProvider => _cacheFileProvider ??= new LocalPlaintextCacheFileProvider();
+
+    private void InitStartupTimeout()
+    {
+        var startupTimeout = GetAppConfig(nameof(StartupTimeout));
+
+        if (string.IsNullOrWhiteSpace(startupTimeout) || int.TryParse(startupTimeout, out _timeout)) return;
+
+        _timeout = 30000;
+
+        Logger().Error($"Config for Apollo.Timeout is invalid: {startupTimeout}");
+    }
+
+    public int StartupTimeout => _startupTimeout;
 
     public HttpMessageHandler HttpMessageHandler => _handler;
 
