@@ -2,18 +2,19 @@
 
   <PropertyGroup>
     <AssemblyName>Com.Ctrip.Framework.Apollo.ConfigurationManager</AssemblyName>
-    <PackageReleaseNotes>发布日志请点击打开 https://github.com/apolloconfig/apollo.net/releases</PackageReleaseNotes>
-    <Description>携程Apollo客户端
+    <Description>
+      Xignite Apollo Client SDK
+      　To integrate with Microsoft.Extensions.Configuration, use the Xignite.Apollo.Configuration package.
+      　To integrate with System.Configuration.ConfigurationManager(.net 4.7.1+),use the Xignite.Apollo.ConfigurationManager package.
 
-　　与Microsoft.Extensions.Configuration集成请使用Com.Ctrip.Framework.Apollo.Configuration包
-　　与System.Configuration.ConfigurationManager集成(.net 4.7.1及以后版本)请使用Com.Ctrip.Framework.Apollo.ConfigurationManager包
-　　直接使用ApolloConfigurationManager请使用Com.Ctrip.Framework.Apollo.Configuration或者Com.Ctrip.Framework.Apollo.ConfigurationManager
-
-$(PackageReleaseNotes)</Description>
+      $(PackageReleaseNotes)
+    </Description>
     <PackageTags>$(PackageTags) ConfigurationBuilder ConfigurationManager</PackageTags>
     <RootNamespace>Com.Ctrip.Framework.Apollo</RootNamespace>
     <TargetFrameworks>net471;net45;net40;netstandard2.0;netstandard2.1</TargetFrameworks>
-    <Version>$(ApolloVersion).1</Version>
+    <Version>$(ApolloVersion).0</Version>
+    <PackageId>Xignite.Apollo.ConfigurationManager</PackageId>
+
   </PropertyGroup>
 
   <ItemGroup>
