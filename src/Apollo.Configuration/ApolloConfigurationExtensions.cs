@@ -34,7 +34,7 @@ namespace Microsoft.Extensions.Configuration
         public static IApolloConfigurationBuilder AddApollo(this IConfigurationBuilder builder)
         {
             if (!builder.Properties.TryGetValue(typeof(ApolloConfigurationExtensions).FullName, out var apolloBuilder))
-                throw new InvalidOperationException("Please call 'AddApollo(options)' init apollo at the beginning.");
+                throw new InvalidOperationException("Please call 'AddApollo(options)' to init apollo at the beginning.");
 
             return (ApolloConfigurationBuilder)apolloBuilder;
 
@@ -46,24 +46,51 @@ namespace Com.Ctrip.Framework.Apollo
 {
     public static class ApolloConfigurationBuilderExtensions
     {
+        /// <summary>
+        /// Add default namespace(application)，equivalent to AddNamespace(ConfigConsts.NamespaceApplication)
+        /// </summary>
+        /// <param name="builder"></param>
+        /// <param name="format">The content format of the default namespace</param>
+        /// <returns></returns>
         public static IApolloConfigurationBuilder AddDefault(this IApolloConfigurationBuilder builder, ConfigFileFormat format = ConfigFileFormat.Properties) =>
             builder.AddNamespace(ConfigConsts.NamespaceApplication, null, format);
 
+        /// <summary>
+        /// Add namespace
+        /// </summary>
+        /// <param name="builder"></param>
+        /// <param name="namespace">The namespace name</param>
+        /// <param name="format">The content format of the <paramref name="namespace"/></param>
+        /// <returns></returns>
         public static IApolloConfigurationBuilder AddNamespace(this IApolloConfigurationBuilder builder, string @namespace, ConfigFileFormat format = ConfigFileFormat.Properties) =>
             builder.AddNamespace(@namespace, null, format);
 
+        /// <summary>
+        /// Add namespace
+        /// </summary>
+        /// <param name="builder"></param>
+        /// <param name="namespace">The namespace name</param>
+        /// <param name="sectionKey">As prefix adds to <see cref="IConfiguration"/>, Using <paramref name="sectionKey"/> as an argument to <see cref="IConfiguration.GetSection(string)"/> to get the content of <paramref name="namespace"/>.</param>
+        /// <param name="format">The content format of the <paramref name="namespace"/></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException"></exception>
+        /// <exception cref="ArgumentOutOfRangeException"></exception>
         public static IApolloConfigurationBuilder AddNamespace(this IApolloConfigurationBuilder builder, string @namespace, string? sectionKey, ConfigFileFormat format = ConfigFileFormat.Properties)
         {
             if (string.IsNullOrWhiteSpace(@namespace)) throw new ArgumentNullException(nameof(@namespace));
-            if (format is < ConfigFileFormat.Properties or > ConfigFileFormat.Txt) throw new ArgumentOutOfRangeException(nameof(format), format, $"min:{ConfigFileFormat.Properties}，max:{ConfigFileFormat.Txt}");
+
+            if (format is < ConfigFileFormat.Properties or > ConfigFileFormat.Txt)
+                throw new ArgumentOutOfRangeException(nameof(format), format, $"minimum:{ConfigFileFormat.Properties}，maximum:{ConfigFileFormat.Txt}");
 
             if (format != ConfigFileFormat.Properties) @namespace += "." + format.GetString();
 
             var configRepository = builder.ConfigRepositoryFactory.GetConfigRepository(@namespace);
+
             var previous = builder.Sources.FirstOrDefault(source =>
                 source is ApolloConfigurationProvider apollo &&
                 apollo.SectionKey == sectionKey &&
                 apollo.ConfigRepository == configRepository);
+
             if (previous != null)
             {
                 builder.Sources.Remove(previous);

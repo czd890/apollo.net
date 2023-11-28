@@ -55,19 +55,23 @@ public class ApolloOptions : IApolloOptions
     private string? _localIp;
     private string? _preferLocalIpAddress;
 
-    public virtual string? PreferLocalIpAddress { get => this._preferLocalIpAddress; set { this._preferLocalIpAddress = value; this._localIp = null; } }
+    private IReadOnlyCollection<string>? _preferSubnet;
+
+    public virtual IReadOnlyCollection<string>? PreferSubnet
+    {
+        get => _preferSubnet;
+        set
+        {
+            _preferSubnet = value; _localIp = null;
+        }
+    }
+
     public virtual string LocalIp
     {
-        get
-        {
-            if (this._localIp == null)
-            {
-                this._localIp = NetworkInterfaceManager.GetHostIp(this.PreferLocalIpAddress);
-            }
-            return this._localIp;
-        }
-        set { this._localIp = value; }
+        get => _localIp ??= NetworkInterfaceManager.GetHostIp(_preferSubnet);
+        set => _localIp = value;
     }
+    public virtual string? PreferLocalIpAddress { get => this._preferLocalIpAddress; set { this._preferLocalIpAddress = value; this._localIp = null; } }
 
     /// <summary>Default http://localhost:8080</summary>
     public virtual string? MetaServer
@@ -111,7 +115,7 @@ public class ApolloOptions : IApolloOptions
         }
     }
 
-    [Obsolete("Please use HttpMessageHandler", true)]
+    [Obsolete("Please using the HttpMessageHandler property to configure.", true)]
     public Func<HttpMessageHandler> HttpMessageHandlerFactory
     {
         get => () => _handler;
