@@ -165,3 +165,4 @@ $RECYCLE.BIN/
 *.csv
 /.vs/slnx.sqlite
 /.vs/slnx.sqlite
+/.packages
