@@ -1,5 +1,7 @@
 ﻿using Com.Ctrip.Framework.Apollo.Exceptions;
 
+using System.Net.Http;
+
 namespace Com.Ctrip.Framework.Apollo.Util.Http;
 
 public class HttpUtil : IDisposable

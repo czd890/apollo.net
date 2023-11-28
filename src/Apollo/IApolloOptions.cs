@@ -1,5 +1,6 @@
 ﻿using Com.Ctrip.Framework.Apollo.Enums;
 using System.Collections.ObjectModel;
+using System.Net.Http;
 
 namespace Com.Ctrip.Framework.Apollo;
 

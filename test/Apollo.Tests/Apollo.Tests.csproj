@@ -7,7 +7,7 @@
   <ItemGroup>
     <PackageReference Include="Moq" Version="4.*" />
 
-    <Reference Include="System.Net.Http" Condition="'$(TargetFramework)' == 'net45'" />
+    <Reference Include="System.Net.Http" Condition="'$(TargetFramework)' == 'net472'" />
 
     <ProjectReference Include="..\..\src\Apollo\Apollo.csproj" />
   </ItemGroup>

@@ -1,6 +1,9 @@
 ﻿using Com.Ctrip.Framework.Apollo;
 using Com.Ctrip.Framework.Apollo.Internals;
 using Moq;
+
+using System.Net.Http;
+
 using Xunit;
 
 namespace Apollo.Tests;
@@ -21,9 +24,9 @@ public class ConfigServiceLocatorTest
 
         var locator = new ConfigServiceLocator(new(options), options);
 
-        var services = await locator.GetConfigServices().ConfigureAwait(false);
+        var services = await locator.GetConfigServices();
 
-        Assert.Equal(1, services.Count);
+        Assert.Single(services);
         Assert.Equal(options.MetaServer, services[0].HomepageUrl);
     }
 
@@ -37,9 +40,9 @@ public class ConfigServiceLocatorTest
 
         var locator = new ConfigServiceLocator(new(options), options);
 
-        var services = await locator.GetConfigServices().ConfigureAwait(false);
+        var services = await locator.GetConfigServices();
 
-        Assert.Equal(1, services.Count);
+        Assert.Single(services);
         Assert.Equal(options.ConfigServer?.FirstOrDefault(), services[0].HomepageUrl);
     }
 }

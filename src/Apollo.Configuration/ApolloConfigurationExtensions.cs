@@ -98,7 +98,7 @@ namespace Com.Ctrip.Framework.Apollo
             }
             else
             {
-                builder.Add(new ApolloConfigurationProvider(sectionKey, configRepository));
+                builder.Add(new ApolloConfigurationSource(sectionKey, configRepository));
             }
 
             return builder;

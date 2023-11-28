@@ -4,6 +4,7 @@ using Com.Ctrip.Framework.Apollo.Foundation;
 using Com.Ctrip.Framework.Apollo.Logging;
 using System.Collections.ObjectModel;
 using System.Configuration;
+using System.Net.Http;
 
 namespace Com.Ctrip.Framework.Apollo.Util;
 

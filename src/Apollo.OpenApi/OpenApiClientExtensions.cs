@@ -1,6 +1,8 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Serialization;
+
+using System.Net.Http;
 using System.Net.Http.Formatting;
 
 namespace Com.Ctrip.Framework.Apollo.OpenApi;
