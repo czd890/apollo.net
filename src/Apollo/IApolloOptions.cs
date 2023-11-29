@@ -24,6 +24,7 @@ public interface IApolloOptions : IDisposable
     /// </summary>
     /// <returns> the env </returns>
     Env Env { get; }
+    string? PreferLocalIpAddress { get; }
 #if NET40
     ReadOnlyCollection<string>? PreferSubnet { get; }
 #else

@@ -3,6 +3,7 @@
   <PropertyGroup>
     <TargetFramework>net47</TargetFramework>
     <OutputType>Exe</OutputType>
+    <IsPackable>false</IsPackable>
   </PropertyGroup>
 
   <ItemGroup>

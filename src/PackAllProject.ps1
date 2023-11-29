@@ -1,4 +1,4 @@
-function FindMSBuild () {
+﻿function FindMSBuild () {
     if ($null -eq $env:OS) {
         try {
             return (Get-Command msbuild).Source;
@@ -32,13 +32,7 @@ foreach ($csproj in (Get-ChildItem -r -filter *.csproj)) {
     }
 }
 
-$MSBuild = FindMSBuild
-if ($null -eq $MSBuild) {
-    dotnet build -c Release /p:IsPacking=true ..
-}
-else {
-    & "$MSBuild" /r /m /v:m /p:Configuration=Release /p:IsPacking=true ..
-}
+dotnet build -c Release /p:IsPacking=true
 
 foreach ($csproj in (Get-ChildItem -r -filter *.csproj)) {
     $dir = "$([System.IO.Path]::GetDirectoryName($csproj.FullName))\bin\Release";

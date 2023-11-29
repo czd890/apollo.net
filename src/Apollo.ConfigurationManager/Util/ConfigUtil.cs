@@ -2,6 +2,7 @@
 using Com.Ctrip.Framework.Apollo.Enums;
 using Com.Ctrip.Framework.Apollo.Foundation;
 using Com.Ctrip.Framework.Apollo.Logging;
+
 using System.Collections.ObjectModel;
 using System.Configuration;
 using System.Net.Http;
@@ -32,10 +33,12 @@ public class ConfigUtil : IApolloOptions
             ?.Split(new[] { ':' }, StringSplitOptions.RemoveEmptyEntries);
 #if NET40
         SpecialDelimiter = delimiter == null ? null : new ReadOnlyCollection<string>(delimiter);
+        var pArr = PreferSubnet?.Count > 0 ? PreferSubnet : new ReadOnlyCollection<string>(new string[] { this.PreferLocalIpAddress! });
 #else
         SpecialDelimiter = delimiter;
+        var pArr = PreferSubnet?.Count > 0 ? PreferSubnet : new [] { this.PreferLocalIpAddress! };
 #endif
-        LocalIp = NetworkInterfaceManager.GetHostIp(PreferSubnet);
+        LocalIp = NetworkInterfaceManager.GetHostIp(pArr);
     }
 
     /// <summary>
@@ -212,6 +215,8 @@ public class ConfigUtil : IApolloOptions
     public IReadOnlyCollection<string>? SpecialDelimiter { get; }
 #endif
     public HttpMessageHandler HttpMessageHandler => _handler;
+
+    public string? PreferLocalIpAddress => GetAppConfig("PreferLocalIpAddress");
 
     public static void UseHttpMessageHandler(HttpMessageHandler handler)
     {

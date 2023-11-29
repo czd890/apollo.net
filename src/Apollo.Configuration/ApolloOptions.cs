@@ -68,7 +68,7 @@ public class ApolloOptions : IApolloOptions
 
     public virtual string LocalIp
     {
-        get => _localIp ??= NetworkInterfaceManager.GetHostIp(_preferSubnet);
+        get => _localIp ??= NetworkInterfaceManager.GetHostIp(_preferSubnet?.Any() == true ? _preferSubnet : new[] { this.PreferLocalIpAddress! });
         set => _localIp = value;
     }
     public virtual string? PreferLocalIpAddress { get => this._preferLocalIpAddress; set { this._preferLocalIpAddress = value; this._localIp = null; } }
