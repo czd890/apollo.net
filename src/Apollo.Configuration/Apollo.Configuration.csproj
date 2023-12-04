@@ -11,7 +11,7 @@
     </Description>
     <RootNamespace>Com.Ctrip.Framework.Apollo</RootNamespace>
     <TargetFrameworks>netstandard2.0;netstandard2.1</TargetFrameworks>
-    <Version>$(ApolloVersion).0</Version>
+    <Version>$(ApolloVersion)</Version>
     <PackageId>Xignite.Apollo.Configuration</PackageId>
   </PropertyGroup>
 

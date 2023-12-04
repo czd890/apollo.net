@@ -3,8 +3,8 @@
   <Import Project="..\Directory.Build.props" />
 
   <PropertyGroup>
-    <ApolloVersion>2.10</ApolloVersion>
-    <AssemblyVersion>$(ApolloVersion).0</AssemblyVersion>
+    <ApolloVersion>2.11.0</ApolloVersion>
+    <AssemblyVersion>$(ApolloVersion)</AssemblyVersion>
     <DebugSymbols>True</DebugSymbols>
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
     <GeneratePackageOnBuild Condition="'$(Configuration)' == 'Release'">True</GeneratePackageOnBuild>

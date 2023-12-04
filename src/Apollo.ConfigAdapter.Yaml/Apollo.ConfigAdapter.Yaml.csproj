@@ -8,7 +8,7 @@
     <RootNamespace>Com.Ctrip.Framework.Apollo.ConfigAdapter</RootNamespace>
     <TargetFrameworks>net40;net45;netstandard2.0</TargetFrameworks>
     <PackageId>Xignite.Apollo.ConfigAdapter.Yaml</PackageId>
-    <Version>$(ApolloVersion).0</Version>
+    <Version>$(ApolloVersion)</Version>
   </PropertyGroup>
 
   <ItemGroup>
