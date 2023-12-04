@@ -1,4 +1,5 @@
 ﻿using Com.Ctrip.Framework.Apollo.Enums;
+
 using System.Collections.ObjectModel;
 using System.Net.Http;
 
@@ -46,6 +47,7 @@ public interface IApolloOptions : IDisposable
     /// <summary>Refresh interval. ms</summary>
     int RefreshInterval { get; }
 
+    bool EnableLocalFileCache { get; }
     string? LocalCacheDir { get; }
 
     HttpMessageHandler HttpMessageHandler { get; }
@@ -59,4 +61,5 @@ public interface IApolloOptions : IDisposable
 #else
     IReadOnlyCollection<string>? SpecialDelimiter { get; }
 #endif
+
 }

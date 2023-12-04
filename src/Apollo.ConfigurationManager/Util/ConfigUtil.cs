@@ -191,6 +191,8 @@ public class ConfigUtil : IApolloOptions
 
     public int RefreshInterval => _refreshInterval;
 
+    public bool EnableLocalFileCache => bool.TryParse(GetAppConfig(nameof(EnableLocalFileCache)), out var enableLocalFileCache) && enableLocalFileCache;
+
     public string LocalCacheDir => GetAppConfig(nameof(LocalCacheDir)) ?? Path.Combine(ConfigConsts.DefaultLocalCacheDir, AppId);
 
     public bool EnablePlaceholder => bool.TryParse(GetAppConfig(nameof(EnablePlaceholder)), out var enablePlaceholder) && enablePlaceholder;
