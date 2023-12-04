@@ -28,6 +28,8 @@
     <Product>Xignite.Apollo</Product>
     <PackageReleaseNotes>
       <![CDATA[
+2.11.0: Add an option(EnableLocalFileCache) to support to disable local file cache.
+2.10.0: Split IConfigurationSource from ApolloConfigurationProvider.
 2.9.0:
     1. Change Microsoft.AspNet.WebApi.Client => System.Net.Http.Json on netstandard.
     2. Fix the PreferLocalIpAddress not working.
